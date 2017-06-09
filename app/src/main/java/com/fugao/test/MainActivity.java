@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent1.putExtra("wardId", "1230100");
                 intent1.putExtra("wardName", "二病区");
                 intent1.putExtra("ip","192.168.10.125");
-                intent1.putExtra("port","9997");
+                intent1.putExtra("port","9998");
                 intent1.setClass(MainActivity.this, BreastActivity.class);
                 startActivity(intent1);
                 break;
