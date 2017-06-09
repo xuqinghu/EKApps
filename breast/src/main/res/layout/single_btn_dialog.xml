@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bg_white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/titleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#4bc3fa">
+
+        <ImageView
+            android:id="@+id/dialogCloseImageView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/dialog_close" />
+
+        <TextView
+            android:id="@+id/dialogTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text="提示"
+            android:textColor="@color/text_white"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+<LinearLayout
+    android:visibility="gone"
+    android:id="@+id/contentViewLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="60dp"
+    android:layout_margin="20dp"
+    android:orientation="vertical"></LinearLayout>
+    <TextView
+        android:gravity="center_vertical"
+        android:id="@+id/dialogContentTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="60dp"
+        android:layout_margin="20dp"
+        android:lineSpacingExtra="5dp"
+        android:text="你已经设置了默认卡，使用默认卡?"
+        android:textColor="#212121"
+        android:textSize="17sp"
+        android:visibility="visible" />
+
+        <TextView
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp"
+            android:id="@+id/sureTextView"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_right_btn_selector"
+            android:gravity="center"
+            android:text="@string/sure"
+            android:textColor="@color/text_white"
+            android:textSize="18sp" />
+</LinearLayout>

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/bg_breast_header">
+
+        <LinearLayout
+            android:id="@+id/ll_put_detail_back"
+            android:layout_width="100dp"
+            android:layout_height="50dp">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:background="@mipmap/back" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="存放详情"
+            android:textColor="@color/text_white"
+            android:textSize="@dimen/txt_big" />
+
+        <TextView
+            android:id="@+id/tv_put_detail_transform"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:text="转换位置"
+            android:textColor="@color/text_white"
+            android:textSize="@dimen/txt_mid" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:id="@+id/tv_put_detail_place"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/left_text_bg"
+            android:gravity="center"
+            android:text="当前位置：001-1-1"
+            android:textColor="@color/text_red"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <TextView
+            android:id="@+id/tv_put_detail_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/left_nexttext_bg"
+            android:padding="5dp"
+            android:text="姓名：张三丰"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_put_detail_pid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/right_nexttext_bg"
+            android:padding="5dp"
+            android:text="住院号：21629209"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <TextView
+            android:id="@+id/tv_put_detail_bedNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/left_nexttext_bg"
+            android:padding="5dp"
+            android:text="床位号:+1234"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_put_detail_roomNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/right_nexttext_bg"
+            android:padding="5dp"
+            android:text="房间号：10709"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <TextView
+            android:id="@+id/tv_put_detail_count"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/left_nexttext_bg"
+            android:padding="5dp"
+            android:text="存放数量:4"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_put_detail_amount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/right_nexttext_bg"
+            android:padding="5dp"
+            android:text="存放奶量：1000ml"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="2"
+            android:background="@color/bg_breast_header"
+            android:gravity="center"
+            android:text="泵乳时间"
+            android:textColor="@color/text_white"
+            android:textSize="@dimen/txt_mid" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="1dp"
+            android:layout_weight="1"
+            android:background="@color/bg_breast_header"
+            android:gravity="center"
+            android:text="奶量"
+            android:textColor="@color/text_white"
+            android:textSize="@dimen/txt_mid" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="1dp"
+            android:layout_weight="1"
+            android:background="@color/bg_breast_header"
+            android:gravity="center"
+            android:text="有效期"
+            android:textColor="@color/text_white"
+            android:textSize="@dimen/txt_mid" />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_put_detail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+</LinearLayout>

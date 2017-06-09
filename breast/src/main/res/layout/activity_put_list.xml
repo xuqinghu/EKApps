@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/bg_breast_header">
+
+        <LinearLayout
+            android:id="@+id/ll_put_list_back"
+            android:layout_width="100dp"
+            android:layout_height="50dp">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:background="@mipmap/back" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="母乳存放"
+            android:textColor="@color/text_white"
+            android:textSize="@dimen/txt_big" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_put_list_division"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:paddingBottom="8dp"
+            android:paddingLeft="5dp"
+            android:paddingTop="8dp"
+            android:text="病区：一病区"
+            android:textSize="@dimen/txt_mid" />
+
+        <TextView
+            android:id="@+id/tv_put_list_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:text="存放人：某某某"
+            android:textSize="@dimen/txt_mid" />
+
+        <TextView
+            android:id="@+id/tv_put_list_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingBottom="8dp"
+            android:paddingRight="5dp"
+            android:paddingTop="8dp"
+            android:text="今日已存：6个"
+            android:textSize="@dimen/txt_mid" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="2"
+            android:background="@color/bg_breast_header"
+            android:gravity="center"
+            android:text="存放位置"
+            android:textColor="@color/text_white"
+            android:textSize="@dimen/txt_mid" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="1dp"
+            android:layout_weight="1"
+            android:background="@color/bg_breast_header"
+            android:gravity="center"
+            android:text="床位号"
+            android:textColor="@color/text_white"
+            android:textSize="@dimen/txt_mid" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="1dp"
+            android:layout_weight="1.5"
+            android:background="@color/bg_breast_header"
+            android:gravity="center"
+            android:text="姓名"
+            android:textColor="@color/text_white"
+            android:textSize="@dimen/txt_mid" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="1dp"
+            android:layout_weight="1.5"
+            android:background="@color/bg_breast_header"
+            android:gravity="center"
+            android:text="住院号"
+            android:textColor="@color/text_white"
+            android:textSize="@dimen/txt_mid" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="1dp"
+            android:layout_weight="1"
+            android:background="@color/bg_breast_header"
+            android:gravity="center"
+            android:text="数量"
+            android:textColor="@color/text_white"
+            android:textSize="@dimen/txt_mid" />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_put_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="grayLine">#bfbfbf</color>
+    <color name="listviewBg">#00000000</color>
+    <!--标题栏-->
+    <color name="bg_breast_header">#56A0f5</color>
+    <!--字体颜色-->
+    <color name="text_black">#1f1c1c</color>
+    <color name="text_white">#fff2f7</color>
+    <color name="text_red">#FF0000</color>
+    <color name="text_blue">#007ee6</color>
+    <color name="text_blue5">#007ce3</color>
+    <color name="text_grey">#6f6a6a</color>
+    <color name="text_light_grey">#B2B2B2</color>
+    <color name="text_yellow">#F8C335</color>
+    <color name="text_green">#36B34A</color>
+    <!--线颜色-->
+    <color name="divider_line">#DDDCDC</color>
+    <color name="bg_alpha_black">#b0000000</color>
+    <color name="divider_blue_line">#007ee6</color>
+    <color name="divider_green_line">#36B34A</color>
+
+    <color name="bg_white">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+</resources>
