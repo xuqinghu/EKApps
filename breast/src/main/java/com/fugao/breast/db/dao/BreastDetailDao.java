@@ -66,6 +66,8 @@ public class BreastDetailDao {
             contentValues.put("MilkPumpTime", StringUtils.getString(breastMilkDetial.MilkPumpTime));
             contentValues.put("QRcode", StringUtils.getString(breastMilkDetial.QRcode));
             contentValues.put("MilkBoxState", StringUtils.getString(breastMilkDetial.MilkBoxState));
+            contentValues.put("CFDate", StringUtils.getString(breastMilkDetial.CFDate));
+            contentValues.put("CFGH", StringUtils.getString(breastMilkDetial.CFGH));
             contentValues.put("Upload", upload);
             sqlDB.insert(Constant.BEAST_DETAIL, null, contentValues);
         }
@@ -99,6 +101,8 @@ public class BreastDetailDao {
             contentValues.put("QRcode", StringUtils.getString(breastMilkDetial.QRcode));
             contentValues.put("YXQ", StringUtils.getString(breastMilkDetial.YXQ));
             contentValues.put("MilkBoxState", StringUtils.getString(milkBoxState));
+            contentValues.put("CFDate", StringUtils.getString(breastMilkDetial.CFDate));
+            contentValues.put("CFGH", StringUtils.getString(breastMilkDetial.CFGH));
             contentValues.put("Upload", upload);
             sqlDB.insert(Constant.BEAST_DETAIL, null, contentValues);
         }
@@ -129,7 +133,7 @@ public class BreastDetailDao {
                 + breastMilkDetial.MilkBoxId + "',MilkBoxNo='" + breastMilkDetial.MilkBoxNo
                 + "',CoorDinateID='" + breastMilkDetial.CoorDinateID + "',CoorDinate='"
                 + breastMilkDetial.CoorDinate + "',Remarks='" + breastMilkDetial.Remarks
-                + "',ThawDate='" + breastMilkDetial.ThawDate + "',ThawGH='" + breastMilkDetial.ThawGH
+                + "',CFDate='" + breastMilkDetial.CFDate + "',CFGH='" + breastMilkDetial.CFGH
                 + "',Upload='" + upload + "' where QRcode='" + breastMilkDetial.QRcode + "'";
         sqlDB.execSQL(sql);
     }
@@ -285,6 +289,8 @@ public class BreastDetailDao {
             contentValues.put("QRcode", StringUtils.getString(breastMilkDetial.QRcode));
             contentValues.put("YXQ", StringUtils.getString(breastMilkDetial.YXQ));
             contentValues.put("MilkBoxState", StringUtils.getString(breastMilkDetial.MilkBoxState));
+            contentValues.put("CFGH", StringUtils.getString(breastMilkDetial.CFGH));
+            contentValues.put("CFDate", StringUtils.getString(breastMilkDetial.CFDate));
             contentValues.put("Upload", 0);
             sqlDB.insert(Constant.BEAST_DETAIL, null, contentValues);
         }
@@ -317,6 +323,8 @@ public class BreastDetailDao {
             breastMilkDetial.QRcode = cursor.getString(cursor.getColumnIndex("QRcode"));
             breastMilkDetial.YXQ = cursor.getString(cursor.getColumnIndex("YXQ"));
             breastMilkDetial.MilkBoxState = cursor.getString(cursor.getColumnIndex("MilkBoxState"));
+            breastMilkDetial.CFDate = cursor.getString(cursor.getColumnIndex("CFDate"));
+            breastMilkDetial.CFGH = cursor.getString(cursor.getColumnIndex("CFGH"));
             breastMilkDetials.add(breastMilkDetial);
         }
         cursor.close();
