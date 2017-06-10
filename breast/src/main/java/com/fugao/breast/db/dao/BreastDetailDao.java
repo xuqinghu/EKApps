@@ -114,6 +114,7 @@ public class BreastDetailDao {
     public void updateData(BreastMilkDetial breastMilkDetial, String upload, String pid) {
         String sql = "update " + Constant.BEAST_DETAIL + " set State='"
                 + breastMilkDetial.State + "',ThawDate='" + breastMilkDetial.ThawDate
+                + "',CFGH='" + breastMilkDetial.CFGH + "',CFDate='" + breastMilkDetial.CFDate
                 + "',ThawTime='" + breastMilkDetial.ThawTime + "',ThawGH='"
                 + breastMilkDetial.ThawGH + "',Upload='" + upload
                 + "' where Pid='" + pid + "' and QRcode='" + breastMilkDetial.QRcode + "'";
