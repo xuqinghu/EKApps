@@ -260,6 +260,8 @@ public class BreastDetailDao {
         contentValues.put("QRcode", breastMilkDetial.QRcode);
         contentValues.put("YXQ", breastMilkDetial.YXQ);
         contentValues.put("MilkBoxState", breastMilkDetial.MilkBoxState);
+        contentValues.put("CFGH", breastMilkDetial.CFGH);
+        contentValues.put("CFDate", breastMilkDetial.CFDate);
         contentValues.put("Upload", upload);
         sqlDB.insert(Constant.BEAST_DETAIL, null, contentValues);
     }
