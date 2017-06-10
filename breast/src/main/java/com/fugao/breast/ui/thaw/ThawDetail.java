@@ -180,7 +180,9 @@ public class ThawDetail extends BaseActivity {
         bDetail.State = "2";
         bDetail.ThawDate = "";
         bDetail.ThawTime = "";
-        bDetail.ThawGH = XmlDB.getInstance(ThawDetail.this).getKeyStringValue("nCode", "");
+        bDetail.CFGH = XmlDB.getInstance(ThawDetail.this).getKeyString("nCode", "");
+        bDetail.CFDate = DateUtils.getCurrentDate();
+        bDetail.ThawGH = "";
         if (breastDetailDao.getState(bDetail, breastMilk.Pid).equals("1")) {
             breastDetailDao.updateData(bDetail, "0", breastMilk.Pid);
         } else {
