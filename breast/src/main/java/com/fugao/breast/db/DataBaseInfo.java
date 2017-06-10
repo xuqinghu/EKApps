@@ -109,6 +109,7 @@ public class DataBaseInfo {
                     + "ThawDate varchar(100)," + "ThawTime varchar(100),"
                     + "ThawGH varchar(100)," + "MilkPumpDate varchar(100),"
                     + "MilkPumpTime varchar(100)," + "QRcode varchar(100),"
+                    + "CFGH varchar(50)," + "CFDate varchar(50),"
                     + "YXQ varchar(50)," + "MilkBoxState varchar(50)," + "Upload varchar(50))";
             db.execSQL(breastDetail_Sql);
             String putList_Sql = "CREATE TABLE " + Constant.PUT_LIST
@@ -121,7 +122,7 @@ public class DataBaseInfo {
                     + "CFAccount varchar(50)," + "CFAmount varchar(50),"
                     + "CoorDinateID  varchar(50)," + "RoomNo varchar(50),"
                     + "CoorDinate  varchar(50)," + "Remarks varchar(50),"
-                    + "MilkBoxId  varchar(50)," + "MilkBoxNo varchar(50),"+ "MilkBoxState varchar(50),"
+                    + "MilkBoxId  varchar(50)," + "MilkBoxNo varchar(50)," + "MilkBoxState varchar(50),"
                     + "YZZL varchar(50))";
             db.execSQL(putList_Sql);
             String regist_Sql = "CREATE TABLE " + Constant.BREAST_REGIST

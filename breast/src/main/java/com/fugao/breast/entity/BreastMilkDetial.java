@@ -43,4 +43,8 @@ public class BreastMilkDetial implements Serializable {
     public String YXQ;
     //乳箱状态 1：被释放  2:被占用
     public String MilkBoxState;
+    //存放工号
+    public String CFGH;
+    //存放日期
+    public String CFDate;
 }
