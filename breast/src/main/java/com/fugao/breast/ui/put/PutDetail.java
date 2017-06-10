@@ -205,6 +205,11 @@ public class PutDetail extends BaseActivity {
                                 List<BreastMilkDetial> allData = new ArrayList<>();
                                 //获取这个格子里面所有奶的信息
                                 allData = breastDetailDao.getPutDetailByCoorDinateID(putBreastMilk.CoorDinateID, "2");
+                                //修改存放人员工号和存放日期
+                                for (int i = 0; i < allData.size(); i++) {
+                                    allData.get(i).CFDate = DateUtils.getCurrentDate();
+                                    allData.get(i).CFGH = XmlDB.getInstance(PutDetail.this).getKeyStringValue("nCode", "");
+                                }
                                 //将数据插入转换的格子
                                 breastDetailDao.insertBreastMilkByCoorDinateID(putBreastMilk.Pid, allData, bean);
                                 //删除这个格子里面的所有奶
@@ -296,8 +301,8 @@ public class PutDetail extends BaseActivity {
                                     bean.MilkBoxNo = putBreastMilk.MilkBoxNo;
                                     bean.Remarks = putBreastMilk.Remarks;
                                     bean.QRcode = result;
-                                    bean.ThawDate = DateUtils.getCurrentDate();
-                                    bean.ThawGH = XmlDB.getInstance(PutDetail.this).getKeyStringValue("nCode", "");
+                                    bean.CFDate = DateUtils.getCurrentDate();
+                                    bean.CFGH = XmlDB.getInstance(PutDetail.this).getKeyStringValue("nCode", "");
                                     breastDetailDao.updatePlaceByQRcode(bean, "0");
                                     breastMilkDetials.clear();
                                     breastMilkDetials = breastDetailDao.getPutDetailByCoorDinateID(putBreastMilk.CoorDinateID, "2");
@@ -357,12 +362,13 @@ public class PutDetail extends BaseActivity {
                         breastMilkDetial.PrintState = breastRegists.get(0).PrintState;
                         breastMilkDetial.ThawDate = breastRegists.get(0).ThawDate;
                         breastMilkDetial.ThawTime = breastRegists.get(0).ThawTime;
-                        breastMilkDetial.ThawGH = XmlDB.getInstance(PutDetail.this).getKeyStringValue("nCode", "");
+                        breastMilkDetial.ThawGH = breastRegists.get(0).ThawGH;
+                        breastMilkDetial.CFGH = XmlDB.getInstance(PutDetail.this).getKeyString("nCode", "");
+                        breastMilkDetial.CFDate = DateUtils.getCurrentDate();
                         breastMilkDetial.MilkPumpDate = breastRegists.get(0).MilkPumpDate;
                         breastMilkDetial.MilkPumpTime = breastRegists.get(0).MilkPumpTime;
                         breastMilkDetial.QRcode = breastRegists.get(0).QRcode;
                         breastMilkDetial.YXQ = breastRegists.get(0).YXQ;
-                        breastMilkDetial.ThawDate = DateUtils.getCurrentDate();
                         breastMilkDetial.MilkBoxState = "2";
                         breastDetailDao.insertBreastMilk(breastMilkDetial, "0");
                         breastMilkDetials.clear();
