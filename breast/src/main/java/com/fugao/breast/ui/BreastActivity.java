@@ -1,11 +1,18 @@
 package com.fugao.breast.ui;
 
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.fugao.breast.R;
@@ -21,6 +28,7 @@ import com.fugao.breast.utils.common.DialogUtils;
 import com.fugao.breast.utils.common.OkHttpUtils;
 import com.fugao.breast.utils.common.XmlDB;
 import com.fugao.breast.utils.dialog.SingleBtnDialog;
+import com.fugao.breast.utils.dialog.TwoBtnDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +47,7 @@ public class BreastActivity extends BaseActivity implements View.OnClickListener
     //判断是否有数据未上传  0是没有 1是有
     private int hasData = 0;
     private SingleBtnDialog singleBtnDialog;
+    private TwoBtnDialog twoBtnDialog;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -73,6 +82,7 @@ public class BreastActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void initData() {
         singleBtnDialog = new SingleBtnDialog(BreastActivity.this);
+        twoBtnDialog = new TwoBtnDialog(BreastActivity.this);
         dataBaseInfo = DataBaseInfo.getInstance(BreastActivity.this);
         breastDetailDao = new BreastDetailDao(dataBaseInfo);
         uploadData = new ArrayList<>();
@@ -189,4 +199,48 @@ public class BreastActivity extends BaseActivity implements View.OnClickListener
             upData(uploadData);
         }
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            exit();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void exit() {
+        twoBtnDialog.setDialogCloseImageView(View.GONE);
+        twoBtnDialog.setDialogTitleTextView("温馨提示！");
+        twoBtnDialog.setDialogContentTextView("确定要退出程序吗？");
+        twoBtnDialog.setLeftTextView("否");
+        twoBtnDialog.setRightTextView("是");
+        twoBtnDialog.setCanceledOnTouchOutside(false);
+        twoBtnDialog.setDialogBtnClickListener(new TwoBtnDialog.DialogBtnClickListener() {
+
+                                                   @Override
+                                                   public void leftBtnClick() {
+                                                       twoBtnDialog.dismiss();
+                                                   }
+
+                                                   @Override
+                                                   public void rightBtnClick() {
+                                                       twoBtnDialog.dismiss();
+                                                       try {
+                                                           finish();
+                                                           ActivityManager activityMgr = (ActivityManager) getSystemService(Context
+                                                                   .ACTIVITY_SERVICE);
+                                                           activityMgr.killBackgroundProcesses(getPackageName());
+                                                           System.exit(0);
+                                                       } catch (Exception e) {
+                                                           e.printStackTrace();
+                                                           System.exit(0);
+                                                       }
+                                                   }
+                                               }
+        );
+        twoBtnDialog.show();
+
+    }
+
 }

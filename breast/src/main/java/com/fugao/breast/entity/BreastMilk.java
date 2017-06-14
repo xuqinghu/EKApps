@@ -38,6 +38,11 @@ public class BreastMilk implements Serializable {
     public String YZZL;
     //房间号
     public String RoomNo;
+    //存放瓶数
+    public String CFAccount;
+    //存放量
+    public String CFAmount;
+    public String IsNoYZ;
     //明细
     public List<BreastMilkDetial> BreastMilkItems;
 }

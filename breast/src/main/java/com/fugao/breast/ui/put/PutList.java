@@ -1,13 +1,17 @@
 package com.fugao.breast.ui.put;
 
 import android.content.Intent;
+import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.fugao.breast.R;
 import com.fugao.breast.base.BaseActivity;
@@ -18,7 +22,10 @@ import com.fugao.breast.db.dao.BreastDetailDao;
 import com.fugao.breast.db.dao.BreastRegistDao;
 import com.fugao.breast.db.dao.PutListDao;
 import com.fugao.breast.entity.BreastMilkDetial;
+import com.fugao.breast.entity.BreastRegist;
 import com.fugao.breast.entity.PutBreastMilk;
+import com.fugao.breast.ui.BreastActivity;
+import com.fugao.breast.utils.ToastUtils;
 import com.fugao.breast.utils.common.DateUtils;
 import com.fugao.breast.utils.common.DialogUtils;
 import com.fugao.breast.utils.common.FastJsonUtils;
@@ -39,7 +46,8 @@ import java.util.List;
 
 public class PutList extends BaseActivity {
     private LinearLayout back;
-    private TextView division, name, tv_count;
+    private TextView division, name, tv_count, tv_date, tv_time;
+    private RelativeLayout rl_update;
     private RecyclerView recyclerView;
     private List<PutBreastMilk> data;
     private PutListAdapter adapter;
@@ -51,6 +59,8 @@ public class PutList extends BaseActivity {
     private boolean flag2;
     private SingleBtnDialog singleBtnDialog;
     private TwoBtnDialog twoBtnDialog;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private List<BreastMilkDetial> uploadData;
 
     @Override
     public void setContentView() {
@@ -62,7 +72,12 @@ public class PutList extends BaseActivity {
     public void initView() {
         flag1 = false;
         flag2 = false;
+        rl_update = (RelativeLayout) findViewById(R.id.rl_update);
+        tv_date = (TextView) findViewById(R.id.tv_date);
+        tv_time = (TextView) findViewById(R.id.tv_time);
         back = (LinearLayout) findViewById(R.id.ll_put_list_back);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getIntArray(R.array.color_array));
         recyclerView = (RecyclerView) findViewById(R.id.recycler_put_list);
         division = (TextView) findViewById(R.id.tv_put_list_division);
         name = (TextView) findViewById(R.id.tv_put_list_name);
@@ -73,6 +88,7 @@ public class PutList extends BaseActivity {
 
     @Override
     public void initData() {
+        uploadData = new ArrayList<>();
         singleBtnDialog = new SingleBtnDialog(PutList.this);
         twoBtnDialog = new TwoBtnDialog(PutList.this);
         dataBaseInfo = DataBaseInfo.getInstance(PutList.this);
@@ -88,8 +104,55 @@ public class PutList extends BaseActivity {
         checkNetWork();
     }
 
+    private void hasUpData() {
+        uploadData = breastDetailDao.getBreastMilkDetialByUpload("0");
+        if (uploadData == null || uploadData.size() == 0) {
+            checkNetWork();
+        } else {
+            upData(uploadData);
+        }
+
+    }
+
+    //上传数据
+    private void upData(List<BreastMilkDetial> data) {
+        String json = JSON.toJSONString(data);
+        String url = BreastApi.IP + BreastApi.BREAST;
+        DialogUtils.showProgressDialog(PutList.this, "正在上传数据...");
+        OkHttpUtils.ResultCallback<String> callback = new OkHttpUtils.ResultCallback<String>() {
+            @Override
+            public void onSuccess(String response, int code) {
+                DialogUtils.dissmissProgressDialog();
+                if (code == 200) {
+                    ToastUtils.showShort(PutList.this, "上传成功");
+                    checkNetWork();
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                DialogUtils.dissmissProgressDialog();
+                ToastUtils.showShort(PutList.this, "上传失败");
+            }
+        };
+        OkHttpUtils.post(url, callback, json);
+    }
+
     @Override
     public void initListener() {
+        rl_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hasUpData();
+            }
+        });
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshList();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
         //list点击事件
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -241,6 +304,8 @@ public class PutList extends BaseActivity {
                 if (flag1 && flag2) {
                     DialogUtils.dissmissProgressDialog();
                     recyclerView.setVisibility(View.VISIBLE);
+                    tv_date.setText(DateUtils.getCurrentDate());
+                    tv_time.setText(DateUtils.getCurrentTime1());
                 }
                 if (response != null) {
                     data = FastJsonUtils.getBeanList(response, PutBreastMilk.class);
@@ -290,6 +355,8 @@ public class PutList extends BaseActivity {
                 if (flag1 && flag2) {
                     DialogUtils.dissmissProgressDialog();
                     recyclerView.setVisibility(View.VISIBLE);
+                    tv_date.setText(DateUtils.getCurrentDate());
+                    tv_time.setText(DateUtils.getCurrentTime1());
                 }
                 if (response != null) {
                     List<PutBreastMilk> beans = new ArrayList<>();
@@ -316,19 +383,43 @@ public class PutList extends BaseActivity {
         OkHttpUtils.get(url, callback);
     }
 
+    //根据奶的信息来过滤数据
+    @Override
+    public void receiverCode(String result) {
+        super.receiverCode(result);
+        String pid;
+        List<BreastMilkDetial> breastMilkDetial = breastDetailDao.getBreastMilkDetialByQRcode(result);
+        if (breastMilkDetial != null && breastMilkDetial.size() > 0) {
+            pid = breastMilkDetial.get(0).Pid;
+            data.clear();
+            data = putListDao.getPutListByPid(pid);
+            adapter.setNewData(data);
+        } else {
+            List<BreastRegist> breastRegists = breastRegistDao.getBreastMilkDetialByQRCode(result);
+            if (breastRegists != null && breastRegists.size() > 0) {
+                pid = breastRegists.get(0).Pid;
+                data.clear();
+                data = putListDao.getPutListByPid(pid);
+                adapter.setNewData(data);
+            }
+        }
+
+    }
 
     @Override
     public void receiverPlaceCode(String result) {
         super.receiverCode(result);
-        for (PutBreastMilk putBreastMilk : data) {
-            if (putBreastMilk.CoorDinateID.equals(result)) {
-                Intent intent = new Intent();
-                intent.setClass(PutList.this, PutDetail.class);
-                intent.putExtra("putlist", putBreastMilk);
-                startActivity(intent);
-                break;
+        List<PutBreastMilk> putBeans = putListDao.getPutList();
+        if (putBeans != null && putBeans.size() > 0) {
+            for (PutBreastMilk putBreastMilk : putBeans) {
+                if (putBreastMilk.CoorDinateID.equals(result)) {
+                    Intent intent = new Intent();
+                    intent.setClass(PutList.this, PutDetail.class);
+                    intent.putExtra("putlist", putBreastMilk);
+                    startActivity(intent);
+                    break;
+                }
             }
         }
-
     }
 }

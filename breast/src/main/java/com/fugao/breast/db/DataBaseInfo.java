@@ -99,6 +99,7 @@ public class DataBaseInfo {
                     + "DepartmentName varchar(100)," + "WardName varchar(100),"
                     + "YZTime varchar(100)," + "YZdosis varchar(100),"
                     + "ThawAmount  varchar(50)," + "ThawAccount varchar(50),"
+                    + "CFAccount  varchar(50)," + "CFAmount varchar(50)," + "IsNoYZ varchar(50),"
                     + "YZZL varchar(50)," + "RoomNo varchar(50))";
             db.execSQL(breastList_Sql);
             String breastDetail_Sql = "CREATE TABLE " + Constant.BEAST_DETAIL

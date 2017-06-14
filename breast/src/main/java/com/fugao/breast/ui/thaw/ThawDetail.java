@@ -91,6 +91,7 @@ public class ThawDetail extends BaseActivity {
         recyclerView.setAdapter(adapter);
         //全局设置已解冻奶量
         Constant.THAW_AMOUNT = getThawAmount(DateUtils.getCurrentDate());
+        Constant.PUT_AMOUNT = Integer.parseInt(breastMilk.CFAmount);
         //设置最下方已解冻奶量
         updateAmountValue();
     }
@@ -237,44 +238,51 @@ public class ThawDetail extends BaseActivity {
     public void receiverCode(String result) {
         super.receiverCode(result);
         boolean ishas = false;
-        for (int i = 0; i < breastMilkDetials.size(); i++) {
-            if (result.equals(breastMilkDetials.get(i).QRcode)) {
-                ishas = true;
-                List<BreastMilkDetial> bDetails = new ArrayList<>();
-                bDetails = breastDetailDao.getBreastMilkDetialByPidAndQRcode(breastMilkDetials.get(i).Pid, breastMilkDetials.get(i).QRcode);
-                if (bDetails.size() > 0 && bDetails.get(0).State.equals("3")) {
-                    singleBtnDialog.setDialogCloseImageView(View.GONE);
-                    singleBtnDialog.setDialogTitleTextView("温馨提示！");
-                    singleBtnDialog.setDialogContentTextView("这瓶奶已经被解冻过了");
-                    singleBtnDialog.show();
-                    break;
-                } else {
-                    BreastMilkDetial breastMilkDetial = new BreastMilkDetial();
-                    breastMilkDetial.QRcode = breastMilkDetials.get(i).QRcode;
-                    breastMilkDetial.State = "3";
-                    //补充解冻设置昨天的日期，今日解冻设置今天的日期
-                    if (today) {
-                        breastMilkDetial.ThawDate = DateUtils.getCurrentDate();
-                    } else {
-                        breastMilkDetial.ThawDate = DateUtils.getBeforeDate();
-                    }
-                    breastMilkDetial.ThawTime = DateUtils.getCurrentTime();
-                    breastMilkDetial.MilkBoxState = "2";
-                    breastMilkDetial.ThawGH = XmlDB.getInstance(ThawDetail.this).getKeyStringValue("nCode", "");
-                    coorDinateID = breastMilkDetials.get(i).CoorDinateID;
-                    milkBoxNo = breastMilkDetials.get(i).MilkBoxNo;
-                    remarks = breastMilkDetials.get(i).Remarks;
-                    saveData(breastMilkDetial, breastMilkDetials.get(i).Amount);
-                    ToastUtils.showShort(ThawDetail.this, "解冻成功");
-                    break;
-                }
-            }
-        }
-        if (!ishas) {
+        if ("0".equals(breastMilk.YZdosis)) {
             singleBtnDialog.setDialogCloseImageView(View.GONE);
             singleBtnDialog.setDialogTitleTextView("温馨提示！");
-            singleBtnDialog.setDialogContentTextView("在列表中找不到这瓶奶");
+            singleBtnDialog.setDialogContentTextView("这个病人暂时没有母乳医嘱，不能进行解冻操作");
             singleBtnDialog.show();
+        } else {
+            for (int i = 0; i < breastMilkDetials.size(); i++) {
+                if (result.equals(breastMilkDetials.get(i).QRcode)) {
+                    ishas = true;
+                    List<BreastMilkDetial> bDetails = new ArrayList<>();
+                    bDetails = breastDetailDao.getBreastMilkDetialByPidAndQRcode(breastMilkDetials.get(i).Pid, breastMilkDetials.get(i).QRcode);
+                    if (bDetails.size() > 0 && bDetails.get(0).State.equals("3")) {
+                        singleBtnDialog.setDialogCloseImageView(View.GONE);
+                        singleBtnDialog.setDialogTitleTextView("温馨提示！");
+                        singleBtnDialog.setDialogContentTextView("这瓶奶已经被解冻过了");
+                        singleBtnDialog.show();
+                        break;
+                    } else {
+                        BreastMilkDetial breastMilkDetial = new BreastMilkDetial();
+                        breastMilkDetial.QRcode = breastMilkDetials.get(i).QRcode;
+                        breastMilkDetial.State = "3";
+                        //补充解冻设置昨天的日期，今日解冻设置今天的日期
+                        if (today) {
+                            breastMilkDetial.ThawDate = DateUtils.getCurrentDate();
+                        } else {
+                            breastMilkDetial.ThawDate = DateUtils.getBeforeDate();
+                        }
+                        breastMilkDetial.ThawTime = DateUtils.getCurrentTime();
+                        breastMilkDetial.MilkBoxState = "2";
+                        breastMilkDetial.ThawGH = XmlDB.getInstance(ThawDetail.this).getKeyStringValue("nCode", "");
+                        coorDinateID = breastMilkDetials.get(i).CoorDinateID;
+                        milkBoxNo = breastMilkDetials.get(i).MilkBoxNo;
+                        remarks = breastMilkDetials.get(i).Remarks;
+                        saveData(breastMilkDetial, breastMilkDetials.get(i).Amount);
+                        ToastUtils.showShort(ThawDetail.this, "解冻成功");
+                        break;
+                    }
+                }
+            }
+            if (!ishas) {
+                singleBtnDialog.setDialogCloseImageView(View.GONE);
+                singleBtnDialog.setDialogTitleTextView("温馨提示！");
+                singleBtnDialog.setDialogContentTextView("在列表中找不到这瓶奶");
+                singleBtnDialog.show();
+            }
         }
     }
 
@@ -290,9 +298,11 @@ public class ThawDetail extends BaseActivity {
         if ("refreshData".equals(flag)) {
             Constant.THAW_AMOUNT = (int) (Constant.THAW_AMOUNT - Float.parseFloat(amount));
             Constant.THAW_ACCOUNT = Constant.THAW_ACCOUNT - 1;
+            Constant.PUT_AMOUNT = (int) (Constant.PUT_AMOUNT + Float.parseFloat(amount));
         } else {
             Constant.THAW_AMOUNT = (int) (Constant.THAW_AMOUNT + Float.parseFloat(amount));
             Constant.THAW_ACCOUNT = Constant.THAW_ACCOUNT + 1;
+            Constant.PUT_AMOUNT = (int) (Constant.PUT_AMOUNT - Float.parseFloat(amount));
         }
         updateAmountValue();
         breastMilkDetials.clear();
@@ -302,12 +312,13 @@ public class ThawDetail extends BaseActivity {
             breastMilkDetials = getReplenishData();
         }
         adapter.setNewData(breastMilkDetials);
-        if (isRelease(breastMilkDetials, coorDinateID)) {
-            showReleaseDialog();
-        }
+//        if (isRelease(breastMilkDetials, coorDinateID)) {
+//            showReleaseDialog();
+//        }
         BreastMilk bm = new BreastMilk();
         bm.ThawAccount = Constant.THAW_ACCOUNT + "";
         bm.ThawAmount = Constant.THAW_AMOUNT + "";
+        bm.CFAmount = Constant.PUT_AMOUNT + "";
         if (today) {
             breastListDao.updateData(bm, breastMilk.Pid);
         }

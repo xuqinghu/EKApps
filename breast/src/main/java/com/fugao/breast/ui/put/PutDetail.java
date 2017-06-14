@@ -117,6 +117,10 @@ public class PutDetail extends BaseActivity {
                 if ("转换位置".equals(transform.getText().toString())) {
                     transform.setText("取消转换位置");
                     isTransform = true;
+                    singleBtnDialog.setDialogCloseImageView(View.GONE);
+                    singleBtnDialog.setDialogTitleTextView("温馨提示！");
+                    singleBtnDialog.setDialogContentTextView("请扫描变更抽屉的二维码");
+                    singleBtnDialog.show();
                 } else {
                     transform.setText("转换位置");
                     isTransform = false;

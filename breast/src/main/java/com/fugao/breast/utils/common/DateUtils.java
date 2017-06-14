@@ -45,5 +45,15 @@ public class DateUtils {
         return sdf.format(new Date());
     }
 
+    /**
+     * 得到今天的时间
+     *
+     * @return
+     */
+    public static String getCurrentTime1() {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        return sdf.format(new Date());
+    }
+
 
 }

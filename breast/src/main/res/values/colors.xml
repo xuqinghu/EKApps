@@ -24,5 +24,17 @@
     <color name="divider_green_line">#36B34A</color>
 
     <color name="bg_white">#FFFFFF</color>
+    <color name="bg_alpha_grey">#cccccc</color>
     <color name="transparent">#00000000</color>
+
+    <color name="color_ff5252">#ff5252</color>
+    <color name="color_03a9f4">#2861FE</color>
+    <color name="color_3e802f">#3e802f</color>
+    <color name="color_f4b400">#f4b400</color>
+    <integer-array name="color_array">
+        <item>@color/color_03a9f4</item>
+        <item>@color/color_ff5252</item>
+        <item>@color/color_3e802f</item>
+        <item>@color/color_f4b400</item>
+    </integer-array>
 </resources>

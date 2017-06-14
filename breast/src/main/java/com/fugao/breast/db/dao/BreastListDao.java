@@ -44,7 +44,6 @@ public class BreastListDao {
         return sqlDB.delete(Constant.BREAST_LIST, null, null);
     }
 
-
     public void saveToBreastList(List<BreastMilk> breastMilks) {
         sqlDB.beginTransaction(); // 手动设置开始事务
         ContentValues contentValues;
@@ -68,6 +67,9 @@ public class BreastListDao {
             contentValues.put("ThawAccount", StringUtils.getString(breastMilk.ThawAccount));
             contentValues.put("YZZL", StringUtils.getString(breastMilk.YZZL));
             contentValues.put("RoomNo", StringUtils.getString(breastMilk.RoomNo));
+            contentValues.put("CFAmount", StringUtils.getString(breastMilk.CFAmount));
+            contentValues.put("CFAccount", StringUtils.getString(breastMilk.CFAccount));
+            contentValues.put("IsNoYZ", StringUtils.getString(breastMilk.IsNoYZ));
             if (breastMilk.BreastMilkItems != null && breastMilk.BreastMilkItems.size() > 0) {
                 breastDetailDao.saveToBreastDetail(breastMilk.BreastMilkItems, breastMilk.Pid, "1");
             }
@@ -81,12 +83,38 @@ public class BreastListDao {
     public void updateData(BreastMilk breastMilk, String pid) {
         String sql = "update " + Constant.BREAST_LIST + " set ThawAccount='"
                 + breastMilk.ThawAccount + "',ThawAmount='" + breastMilk.ThawAmount
-                + "' where Pid='" + pid + "'";
+                + "' ,CFAmount='" + breastMilk.CFAmount + "' where Pid='" + pid + "'";
         sqlDB.execSQL(sql);
     }
 
     public List<BreastMilk> getBreastList() {
-        Cursor cursor = sqlDB.query(Constant.BREAST_LIST, null, null,
+        List<BreastMilk> breastMilks = new ArrayList<>();
+        if (getBreastListByIsNoYZAndCFAmount() != null && getBreastListByIsNoYZAndCFAmount().size() > 0) {
+            breastMilks.addAll(getBreastListByIsNoYZAndCFAmount());
+        }
+        if (getBreastListByIsNoYZAndCFAmount1() != null && getBreastListByIsNoYZAndCFAmount1().size() > 0) {
+            breastMilks.addAll(getBreastListByIsNoYZAndCFAmount1());
+        }
+        if (getBreastListByIsNoYZ() != null && getBreastListByIsNoYZ().size() > 0) {
+            breastMilks.addAll(getBreastListByIsNoYZ());
+        }
+        return breastMilks;
+    }
+
+    public List<BreastMilk> getBreastListByIsNoYZAndCFAmount() {
+        Cursor cursor = sqlDB.query(Constant.BREAST_LIST, null, "IsNoYZ='有' and CFAmount>'0'",
+                null, null, null, null);
+        return getBreastListByCursor(cursor);
+    }
+
+    public List<BreastMilk> getBreastListByIsNoYZAndCFAmount1() {
+        Cursor cursor = sqlDB.query(Constant.BREAST_LIST, null, "IsNoYZ='有' and CFAmount='0'",
+                null, null, null, null);
+        return getBreastListByCursor(cursor);
+    }
+
+    public List<BreastMilk> getBreastListByIsNoYZ() {
+        Cursor cursor = sqlDB.query(Constant.BREAST_LIST, null, "IsNoYZ='无'",
                 null, null, null, null);
         return getBreastListByCursor(cursor);
     }
@@ -110,6 +138,9 @@ public class BreastListDao {
             breastMilk.ThawAccount = cursor.getString(cursor.getColumnIndex("ThawAccount"));
             breastMilk.YZZL = cursor.getString(cursor.getColumnIndex("YZZL"));
             breastMilk.RoomNo = cursor.getString(cursor.getColumnIndex("RoomNo"));
+            breastMilk.CFAccount = cursor.getString(cursor.getColumnIndex("CFAccount"));
+            breastMilk.CFAmount = cursor.getString(cursor.getColumnIndex("CFAmount"));
+            breastMilk.IsNoYZ = cursor.getString(cursor.getColumnIndex("IsNoYZ"));
             breastMilks.add(breastMilk);
         }
         cursor.close();

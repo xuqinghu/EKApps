@@ -17,8 +17,4 @@ public class PutBreastMilk extends BreastMilk implements Serializable {
     public String MilkBoxNo;
     //乳箱状态
     public String MilkBoxState;
-    //存放瓶数
-    public String CFAccount;
-    //存放量
-    public String CFAmount;
 }

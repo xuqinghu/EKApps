@@ -104,6 +104,18 @@ public class PutListDao {
     }
 
     /**
+     * 根据病人住院号获取数据
+     *
+     * @param pid
+     * @return
+     */
+    public List<PutBreastMilk> getPutListByPid(String pid) {
+        Cursor cursor = sqlDB.query(Constant.PUT_LIST, null, "Pid='" + pid + "'",
+                null, null, null, null);
+        return getPutListByCursor(cursor);
+    }
+
+    /**
      * 根据位置二维码获取数据
      *
      * @param coorDinateID

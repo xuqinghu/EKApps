@@ -5,16 +5,21 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.fugao.breast.R;
 import com.fugao.breast.base.BaseActivity;
 import com.fugao.breast.constant.BreastApi;
 import com.fugao.breast.db.DataBaseInfo;
+import com.fugao.breast.db.dao.BreastDetailDao;
 import com.fugao.breast.db.dao.BreastListDao;
 import com.fugao.breast.entity.BreastMilk;
+import com.fugao.breast.entity.BreastMilkDetial;
 import com.fugao.breast.ui.put.PutList;
+import com.fugao.breast.utils.ToastUtils;
 import com.fugao.breast.utils.common.DateUtils;
 import com.fugao.breast.utils.common.DialogUtils;
 import com.fugao.breast.utils.common.FastJsonUtils;
@@ -37,10 +42,13 @@ public class ThawList extends BaseActivity {
     private List<BreastMilk> data;
     private RecyclerView recyclerView;
     private LinearLayout back, search;
-    private TextView division, name, count, tv_updata_count;
+    private TextView division, name, count, tv_date, tv_time;
+    private RelativeLayout rl_update;
     private DataBaseInfo dataBaseInfo;
     private BreastListDao breastListDao;
+    private BreastDetailDao breastDetailDao;
     private SingleBtnDialog singleBtnDialog;
+    private List<BreastMilkDetial> uploadData;
 
 
     @Override
@@ -57,22 +65,60 @@ public class ThawList extends BaseActivity {
         division = (TextView) findViewById(R.id.tv_breast_list_division);
         name = (TextView) findViewById(R.id.tv_breast_list_name);
         count = (TextView) findViewById(R.id.tv_breast_list_count);
-        tv_updata_count = (TextView) findViewById(R.id.tv_updata_count);
+        tv_date = (TextView) findViewById(R.id.tv_date);
+        tv_time = (TextView) findViewById(R.id.tv_time);
+        rl_update = (RelativeLayout) findViewById(R.id.rl_update);
         division.setText("病区:" + XmlDB.getInstance(ThawList.this).getKeyStringValue("wardName", ""));
         name.setText("解冻人:" + XmlDB.getInstance(ThawList.this).getKeyStringValue("nName", ""));
     }
 
     @Override
     public void initData() {
+        uploadData = new ArrayList<>();
         singleBtnDialog = new SingleBtnDialog(ThawList.this);
         dataBaseInfo = DataBaseInfo.getInstance(ThawList.this);
         breastListDao = new BreastListDao(dataBaseInfo);
+        breastDetailDao = new BreastDetailDao(dataBaseInfo);
         data = new ArrayList<>();
         recyclerView.addItemDecoration(new RecyclerViewDivider(ThawList.this, LinearLayoutManager.HORIZONTAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ThawListAdapter(R.layout.breast_list_item, data);
         recyclerView.setAdapter(adapter);
         checkNetWork();
+    }
+
+    private void hasUpData() {
+        uploadData = breastDetailDao.getBreastMilkDetialByUpload("0");
+        if (uploadData == null || uploadData.size() == 0) {
+            checkNetWork();
+        } else {
+            upData(uploadData);
+        }
+
+    }
+
+    //上传数据
+    private void upData(List<BreastMilkDetial> data) {
+        String json = JSON.toJSONString(data);
+        String url = BreastApi.IP + BreastApi.BREAST;
+        DialogUtils.showProgressDialog(ThawList.this, "正在上传数据...");
+        OkHttpUtils.ResultCallback<String> callback = new OkHttpUtils.ResultCallback<String>() {
+            @Override
+            public void onSuccess(String response, int code) {
+                DialogUtils.dissmissProgressDialog();
+                if (code == 200) {
+                    ToastUtils.showShort(ThawList.this, "上传成功");
+                    checkNetWork();
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                DialogUtils.dissmissProgressDialog();
+                ToastUtils.showShort(ThawList.this, "上传失败");
+            }
+        };
+        OkHttpUtils.post(url, callback, json);
     }
 
     //设置已解冻瓶数
@@ -87,6 +133,13 @@ public class ThawList extends BaseActivity {
 
     @Override
     public void initListener() {
+        rl_update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hasUpData();
+
+            }
+        });
         //list点击事件
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
@@ -145,9 +198,13 @@ public class ThawList extends BaseActivity {
                 DialogUtils.dissmissProgressDialog();
                 recyclerView.setVisibility(View.VISIBLE);
                 if (response != null) {
+                    tv_date.setText(DateUtils.getCurrentDate());
+                    tv_time.setText(DateUtils.getCurrentTime1());
                     data = FastJsonUtils.getBeanList(response, BreastMilk.class);
                     breastListDao.deleteAllInfo();
                     breastListDao.saveToBreastList(data);
+                    data.clear();
+                    data = breastListDao.getBreastList();
                     adapter.setNewData(data);
                     thawCount(data);
                 }
