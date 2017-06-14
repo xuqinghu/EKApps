@@ -258,6 +258,8 @@ public class ThawDetail extends BaseActivity {
                     } else {
                         BreastMilkDetial breastMilkDetial = new BreastMilkDetial();
                         breastMilkDetial.QRcode = breastMilkDetials.get(i).QRcode;
+                        breastMilkDetial.CFDate = breastMilkDetials.get(i).CFDate;
+                        breastMilkDetial.CFGH = breastMilkDetials.get(i).CFGH;
                         breastMilkDetial.State = "3";
                         //补充解冻设置昨天的日期，今日解冻设置今天的日期
                         if (today) {
