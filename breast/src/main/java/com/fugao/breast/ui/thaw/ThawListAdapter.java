@@ -34,7 +34,7 @@ public class ThawListAdapter extends BaseQuickAdapter<BreastMilk, BaseViewHolder
         } else if (!"0".equals(item.YZdosis) && "0".equals(item.CFAmount)) {
             helper.setBackgroundColor(R.id.ll_thaw_item_bg, Color.parseColor("#FFB5B5"));
         } else {
-            helper.setBackgroundColor(R.id.ll_thaw_item_bg, Color.parseColor("#fff2f7"));
+            helper.setBackgroundColor(R.id.ll_thaw_item_bg, Color.parseColor("#FFFFFF"));
         }
     }
 }

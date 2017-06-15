@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="母乳存放"
+            android:text="存母乳"
             android:textColor="@color/text_white"
             android:textSize="@dimen/txt_big" />
 

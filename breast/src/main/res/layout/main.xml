@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/rl"
@@ -11,10 +10,10 @@
         android:background="@color/bg_breast_header">
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/ll_back"
             android:layout_width="100dp"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="30dp"
@@ -57,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="母乳存放"
+                android:text="存母乳"
                 android:textColor="@color/text_white"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -82,7 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="母乳解冻"
+                android:text="备母乳"
                 android:textColor="@color/text_white"
                 android:textSize="18sp" />
         </LinearLayout>

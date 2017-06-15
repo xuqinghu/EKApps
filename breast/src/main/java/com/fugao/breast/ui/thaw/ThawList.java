@@ -69,7 +69,7 @@ public class ThawList extends BaseActivity {
         tv_time = (TextView) findViewById(R.id.tv_time);
         rl_update = (RelativeLayout) findViewById(R.id.rl_update);
         division.setText("病区:" + XmlDB.getInstance(ThawList.this).getKeyStringValue("wardName", ""));
-        name.setText("解冻人:" + XmlDB.getInstance(ThawList.this).getKeyStringValue("nName", ""));
+        name.setText("备奶人:" + XmlDB.getInstance(ThawList.this).getKeyStringValue("nName", ""));
     }
 
     @Override
@@ -127,7 +127,7 @@ public class ThawList extends BaseActivity {
         for (BreastMilk bean : beans) {
             c = c + Integer.parseInt(bean.ThawAccount);
         }
-        count.setText("已解冻：" + c);
+        count.setText("已备：" + c);
     }
 
 

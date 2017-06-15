@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="解冻详情"
+            android:text="备明日母乳"
             android:textColor="@color/text_white"
             android:textSize="@dimen/txt_big" />
 
@@ -38,7 +38,7 @@
             android:layout_centerVertical="true"
             android:gravity="center"
             android:paddingLeft="10dp"
-            android:text="补充解冻"
+            android:text="备今日"
             android:textColor="@color/text_white"
             android:textSize="@dimen/txt_mid" />
     </RelativeLayout>
@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="正在进行补充解冻"
+        android:text="现在是在备今日母乳"
         android:textColor="@color/text_red"
         android:textSize="@dimen/txt_max"
         android:visibility="gone" />
@@ -260,7 +260,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="已解冻奶量:"
+            android:text="已备奶量:"
             android:textSize="@dimen/txt_big" />
 
         <TextView

@@ -155,8 +155,8 @@ public class ThawDetail extends BaseActivity {
                     breastMilkDetials = getReplenishData();
                     adapter.setNewData(breastMilkDetials);
                     flag.setVisibility(View.VISIBLE);
-                    flag.setText("正在进行补充解冻");
-                    replenish.setText("今日解冻");
+                    flag.setText("现在是在备今日母乳");
+                    replenish.setText("备明日");
                     Constant.THAW_AMOUNT = getThawAmount(DateUtils.getBeforeDate());
                     updateAmountValue();
                 } else {
@@ -165,7 +165,7 @@ public class ThawDetail extends BaseActivity {
                     breastMilkDetials = getTodayData();
                     adapter.setNewData(breastMilkDetials);
                     flag.setVisibility(View.GONE);
-                    replenish.setText("补充解冻");
+                    replenish.setText("备今日");
                     Constant.THAW_AMOUNT = getThawAmount(DateUtils.getCurrentDate());
                     updateAmountValue();
                 }
