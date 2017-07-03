@@ -4,38 +4,61 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp">
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
 
-        <TextView
-            android:id="@+id/tv_boxing_deptName"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:text="科室：营养室"
-            android:textColor="@color/text_blue"
-            android:textSize="@dimen/txt_mid" />
+            android:layout_centerVertical="true">
 
-        <TextView
-            android:id="@+id/tv_boxing_userName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.2"
-            android:text="操作人：高晓"
-            android:textColor="@color/text_blue"
-            android:textSize="@dimen/txt_mid" />
+            <TextView
+                android:id="@+id/tv_check_advice_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="核对人:高晓"
+                android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/tv_boxing_count"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:text="已装：6个"
+            <TextView
+                android:id="@+id/tv_check_advice_personCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="2dp"
+                android:text="人数:0"
+                android:textColor="@color/text_green"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_check_advice_milkCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="2dp"
+                android:text="瓶数:0"
+                android:textColor="@color/text_blue"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_boxing"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/bg_put"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:text="装箱已核对奶瓶"
             android:textColor="@color/text_blue"
-            android:textSize="@dimen/txt_mid" />
-    </LinearLayout>
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,10 +67,10 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="30dp"
-            android:layout_weight="1.5"
+            android:layout_weight="1"
             android:background="@color/bg_breast_header"
             android:gravity="center"
-            android:text="奶箱编号"
+            android:text="床位号"
             android:textColor="@color/text_white"
             android:textSize="15sp" />
 
@@ -58,7 +81,19 @@
             android:layout_weight="1.5"
             android:background="@color/bg_breast_header"
             android:gravity="center"
-            android:text="奶箱规格"
+            android:text="姓名"
+            android:textColor="@color/text_white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_select_milk"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="1dp"
+            android:layout_weight="2"
+            android:background="@color/bg_breast_header"
+            android:gravity="center"
+            android:text="奶名"
             android:textColor="@color/text_white"
             android:textSize="15sp" />
 
@@ -69,7 +104,7 @@
             android:layout_weight="1"
             android:background="@color/bg_breast_header"
             android:gravity="center"
-            android:text="奶瓶数"
+            android:text="瓶数"
             android:textColor="@color/text_white"
             android:textSize="15sp" />
 
@@ -77,35 +112,24 @@
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_marginLeft="1dp"
-            android:layout_weight="1.5"
+            android:layout_weight="1"
             android:background="@color/bg_breast_header"
             android:gravity="center"
-            android:text="病区"
-            android:textColor="@color/text_white"
-            android:textSize="15sp" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="1dp"
-            android:layout_weight="1.5"
-            android:background="@color/bg_breast_header"
-            android:gravity="center"
-            android:text="装箱时间"
+            android:text="状态"
             android:textColor="@color/text_white"
             android:textSize="15sp" />
 
     </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/refresh_box"
+        android:id="@+id/refresh_advice"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_boxing"
+            android:id="@+id/recyclerView_advice"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

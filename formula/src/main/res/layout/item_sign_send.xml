@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.fugao.formula.utils.swipe.SwipeLayout xmlns:swipe="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/swipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        swipe:leftEdgeSwipeOffset="0dp"
+        swipe:rightEdgeSwipeOffset="0dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:tag="Bottom2">
+
+            <Button
+                android:id="@+id/btn1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/text_green"
+                android:text="取消签发"
+                android:textColor="@color/text_white"
+                android:textSize="@dimen/txt_mid" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:elevation="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <TextView
+                android:id="@+id/tv_code"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="编号"
+                android:textColor="@color/text_grey"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_size"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="1dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="规格"
+                android:textColor="@color/text_grey"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_count"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="1dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="已装瓶数"
+                android:textColor="@color/text_grey"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </com.fugao.formula.utils.swipe.SwipeLayout>
+
+</LinearLayout>

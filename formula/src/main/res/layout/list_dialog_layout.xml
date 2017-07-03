@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/titleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/bg_breast_header"
+        android:gravity="center"
+        android:text="病区"
+        android:textColor="@color/text_white"
+        android:textSize="16sp" />
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:layout_below="@id/titleTextView"
+        android:background="@color/bg_white"
+        android:divider="@color/bg_alpha_grey"
+        android:dividerHeight="1px"
+        android:minHeight="280dp" />
+
+    <TextView
+        android:id="@+id/promptTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="病区"
+        android:textColor="@color/text_black"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+</RelativeLayout>

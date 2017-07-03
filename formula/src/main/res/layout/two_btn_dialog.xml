@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bg_white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#4bc3fa">
+
+        <ImageView
+            android:id="@+id/dialogCloseImageView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="5dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:src="@mipmap/dialog_close" />
+
+        <TextView
+            android:id="@+id/dialogTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:text="提示"
+            android:textColor="@color/text_white"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/contentViewLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:minHeight="60dp"
+        android:orientation="vertical"
+        android:visibility="gone"></LinearLayout>
+
+    <TextView
+        android:id="@+id/dialogContentTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:gravity="center_vertical"
+        android:lineSpacingExtra="5dp"
+        android:minHeight="60dp"
+        android:text="你已经设置了默认卡，使用默认卡?"
+        android:textColor="#212121"
+        android:textSize="17sp"
+        android:visibility="visible" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/leftTextView"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_left_btn_selector"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textColor="@color/text_white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/rightTextView"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="25dp"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_right_btn_selector"
+            android:gravity="center"
+            android:text="@string/sure"
+            android:textColor="@color/text_white"
+            android:textSize="18sp" />
+    </LinearLayout>
+</LinearLayout>

@@ -15,7 +15,8 @@
         <LinearLayout
             android:id="@+id/ll_back"
             android:layout_width="100dp"
-            android:layout_height="50dp">
+            android:layout_height="50dp"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="30dp"
@@ -34,17 +35,19 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:layout_below="@+id/rl"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/ll_boxing"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:background="@drawable/button_bg"
             android:orientation="vertical">
 
@@ -52,22 +55,23 @@
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center"
-                android:background="@mipmap/put" />
+                android:background="@mipmap/boxing" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="装箱"
+                android:text="核对装箱"
                 android:textColor="@color/text_white"
                 android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ll_thaw"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginLeft="20dp"
+            android:id="@+id/ll_sign_send"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
             android:background="@drawable/button_bg"
             android:orientation="vertical">
 
@@ -77,13 +81,39 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
-                android:background="@mipmap/qu" />
+                android:background="@mipmap/send" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="转运"
+                android:text="签发"
+                android:textColor="@color/text_white"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_sign_receive"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_bg"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@mipmap/receive" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="签收"
                 android:textColor="@color/text_white"
                 android:textSize="18sp" />
         </LinearLayout>

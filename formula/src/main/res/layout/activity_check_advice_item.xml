@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.fugao.formula.utils.swipe.SwipeLayout xmlns:swipe="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/swipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        swipe:leftEdgeSwipeOffset="0dp"
+        swipe:rightEdgeSwipeOffset="0dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:tag="Bottom2">
+
+            <Button
+                android:id="@+id/btn1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/text_green"
+                android:text="取消核对"
+                android:textColor="@color/text_white"
+                android:textSize="@dimen/txt_mid" />
+
+            <Button
+                android:id="@+id/btn2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#FF5534"
+                android:text="btn2"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:elevation="5dp">
+
+            <TextView
+                android:id="@+id/tv_check_advice_item_bedNo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="床位号"
+                android:textColor="@color/text_grey"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_weight="1.5"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_check_advice_item_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="姓名"
+                    android:textColor="@color/text_grey"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tv_check_advice_item_pid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="住院号"
+                    android:textColor="@color/text_grey"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/tv_check_advice_item_milkName"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="奶名"
+                android:textColor="@color/text_grey"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_check_advice_item_count"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="瓶数"
+                android:textColor="@color/text_grey"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_check_advice_item_state"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="状态"
+                android:textColor="@color/text_grey"
+                android:textSize="15sp" />
+        </LinearLayout>
+    </com.fugao.formula.utils.swipe.SwipeLayout>
+
+</LinearLayout>
