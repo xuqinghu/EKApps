@@ -1,14 +1,21 @@
 package com.fugao.formula.ui.box;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
+import android.view.View;
 import android.widget.TextView;
 
-import com.flyco.tablayout.CommonTabLayout;
-import com.flyco.tablayout.listener.CustomTabEntity;
+import com.flyco.tablayout.SegmentTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.fugao.formula.R;
 import com.fugao.formula.base.BaseActivity;
-import com.fugao.formula.entity.TabEntity;
+import com.fugao.formula.constant.Constant;
+import com.fugao.formula.db.DataBaseInfo;
+import com.fugao.formula.db.dao.MilkNameDao;
+import com.fugao.formula.utils.StringUtils;
+import com.fugao.formula.utils.ToastUtils;
+import com.fugao.formula.utils.XmlDB;
 
 import java.util.ArrayList;
 
@@ -21,12 +28,18 @@ import butterknife.BindView;
 
 public class BoxingActivity extends BaseActivity {
     @BindView(R.id.tl)
-    CommonTabLayout tl;
-    @BindView(R.id.tv_activity_boxing_title)
-    TextView title;
-    private ArrayList<CustomTabEntity> mTabEntities;
+    SegmentTabLayout tl;
+    @BindView(R.id.tv_division)
+    TextView division;
+    @BindView(R.id.tv_all_sure)
+    TextView tv_all_sure;
     private ArrayList<Fragment> mFragments = new ArrayList<>();
-    private String[] mTitles = {"未装箱", "已装箱"};
+    private CheckAdviceFragment fragment1;
+    private BoxingFragment fragment2;
+    private String[] mTitles = {"医嘱核对", "今日装箱"};
+    private String time;
+    public MilkNameDao milkNameDao;
+    private String adviceIds = "";
 
     @Override
     public void setContentView() {
@@ -36,32 +49,51 @@ public class BoxingActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        title.setText(mTitles[0]);
+        showAllSure();
     }
 
     @Override
     public void initData() {
-        mTabEntities = new ArrayList<>();
-        for (String title : mTitles) {
-            if ("已装箱".equals(title)) {
-                mFragments.add(BoxingFragment.getInstance(title));
-            } else if ("未装箱".equals(title)) {
-                mFragments.add(NotBoxingFragment.getInstance(title));
-            }
-
-        }
-        for (int i = 0; i < mTitles.length; i++) {
-            mTabEntities.add(new TabEntity(mTitles[i]));
-        }
-        tl.setTabData(mTabEntities, this, R.id.fl_change, mFragments);
+        milkNameDao = new MilkNameDao(DataBaseInfo.getInstance(BoxingActivity.this));
+        fragment1 = new CheckAdviceFragment();
+        mFragments.add(fragment1);
+        fragment2 = new BoxingFragment();
+        mFragments.add(fragment2);
+        division.setVisibility(View.VISIBLE);
+        division.setText(XmlDB.getInstance(BoxingActivity.this).getKeyStringValue("divisionName", ""));
+        tl.setTabData(mTitles, this, R.id.fl_change, mFragments);
     }
 
     @Override
     public void initListener() {
+        tv_all_sure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Constant.CHECK_ALL = true;
+                fragment1.getAllMilkNo();
+                fragment1.checkYZ(tv_all_sure);
+            }
+        });
+        division.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(BoxingActivity.this, SelectActivity.class);
+                startActivityForResult(intent, 501);
+            }
+        });
         tl.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int i) {
-                title.setText(mTitles[i]);
+                tl.setCurrentTab(i);
+                if ("医嘱核对".equals(mTitles[i])) {
+                    division.setVisibility(View.VISIBLE);
+                } else {
+                    //今日装箱隐藏全部核对和病区两个按钮
+                    division.setVisibility(View.GONE);
+                    tv_all_sure.setVisibility(View.GONE);
+                }
+
             }
 
             @Override
@@ -77,4 +109,54 @@ public class BoxingActivity extends BaseActivity {
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME) {
+            BoxingActivity.this.finish();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    //判断是否显示全部核对按钮
+    private void showAllSure() {
+        time = XmlDB.getInstance(BoxingActivity.this).getKeyString("time", "");
+        if (!StringUtils.StringIsEmpty(time) && !time.contains(";")) {
+            tv_all_sure.setVisibility(View.VISIBLE);
+        } else {
+            tv_all_sure.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    //扫描奶瓶
+    @Override
+    public void receiveMilkCode(String result) {
+        super.receiveMilkCode(result);
+        fragment1.getAdviceIDList(result);
+        adviceIds = fragment1.getAdviceIDs();
+        if (StringUtils.StringIsEmpty(adviceIds)) {
+            ToastUtils.showShort(BoxingActivity.this, "没有找到这个奶瓶，请核查下");
+        } else {
+            fragment1.checkYZ(tv_all_sure);
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case 502:
+                division.setText(XmlDB.getInstance(BoxingActivity.this).getKeyStringValue("divisionName", ""));
+                showAllSure();
+                fragment1.checkNetWork();
+                break;
+            default:
+                break;
+        }
+    }
 }
