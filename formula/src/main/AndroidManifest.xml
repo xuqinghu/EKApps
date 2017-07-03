@@ -2,20 +2,48 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fugao.formula">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 判断是否联网 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
+        android:name=".FormulaApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/milk"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:windowSoftInputMode="stateHidden"></activity>
         <activity android:name=".ui.box.BoxingActivity"></activity>
+        <activity android:name=".ui.box.SelectActivity"></activity>
+        <activity android:name=".ui.box.SelectBoxActivity"></activity>
+        <activity android:name=".ui.box.BoxDetailActivity"></activity>
+        <activity android:name=".ui.box.AdviceDetailActivity"></activity>
+        <activity android:name=".ui.MainActivity"></activity>
+        <activity
+            android:name=".SyncActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/android:Theme.Holo.Light.Dialog"></activity>
+        <activity
+            android:name=".LoginDialogActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.HalfTranslucent"></activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/setting_style"></activity>
+        <activity android:name=".ui.signSend.SignSendActivity"></activity>
+        <activity android:name=".ui.signrReceive.SignReceiveActivity"></activity>
     </application>
 
 </manifest>

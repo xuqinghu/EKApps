@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">formula</string>
+    <string name="app_name">配方奶系统</string>
+    <string name="sure">确认</string>
+    <string name="cancel">取消</string>
 </resources>

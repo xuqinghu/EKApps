@@ -8,4 +8,7 @@
     <dimen name="txt_mid">16.0sp</dimen>
     <dimen name="txt_nor">14.0sp</dimen>
     <dimen name="txt_min">12.0sp</dimen>
+    <!--popmenu相关-->
+    <dimen name="popmenu_yoff">5.0dip</dimen>
+    <dimen name="popmenu_width">150.0dip</dimen>
 </resources>
