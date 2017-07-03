@@ -32,9 +32,9 @@ public class OkHttpUtils {
 
     private OkHttpUtils() {
         mOkHttpClient = new OkHttpClient();
-        mOkHttpClient.setConnectTimeout(5, TimeUnit.SECONDS);
-        mOkHttpClient.setWriteTimeout(20, TimeUnit.SECONDS);
-        mOkHttpClient.setReadTimeout(20, TimeUnit.SECONDS);
+        mOkHttpClient.setConnectTimeout(2, TimeUnit.SECONDS);
+        mOkHttpClient.setWriteTimeout(10, TimeUnit.SECONDS);
+        mOkHttpClient.setReadTimeout(10, TimeUnit.SECONDS);
         //cookie enabled
         mOkHttpClient.setCookieHandler(new CookieManager(null, CookiePolicy.ACCEPT_ORIGINAL_SERVER));
         mDelivery = new Handler(Looper.getMainLooper());

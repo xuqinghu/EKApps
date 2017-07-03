@@ -23,6 +23,12 @@ public class DateUtils {
         return sdf.format(new Date());
     }
 
+    public static String getCurrentDateAndTime(){
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.format(date);
+    }
+
     /**
      * 得到昨天的日期
      *
