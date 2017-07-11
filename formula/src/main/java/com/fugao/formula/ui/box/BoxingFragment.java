@@ -60,8 +60,8 @@ public class BoxingFragment extends BaseFragment {
     @Override
     public void initView(View currentView) {
         refresh_box.setColorSchemeColors(getResources().getIntArray(R.array.color_array));
-        userName.setText("操作人：" + XmlDB.getInstance(fatherActivity).getKeyStringValue("userName", ""));
-        deptName.setText("科室：" + XmlDB.getInstance(fatherActivity).getKeyString("deptName", ""));
+        userName.setText("操作人:" + XmlDB.getInstance(fatherActivity).getKeyStringValue("userName", ""));
+        deptName.setText("科室:" + XmlDB.getInstance(fatherActivity).getKeyString("deptName", ""));
     }
 
     @Override
@@ -136,13 +136,13 @@ public class BoxingFragment extends BaseFragment {
                 if (code == 200) {
                     if (response != null) {
                         if ("[]".equals(response)) {
-                            count.setText("已装：0个");
+                            count.setText("已装:0个");
                             ToastUtils.showShort(fatherActivity, "没有数据");
                         } else {
                             mList = FastJsonUtils.getBeanList(response, BoxListEntity.class);
                             recyclerView.setVisibility(View.VISIBLE);
                             adapter.setNewData(mList);
-                            count.setText("已装：" + mList.size() + "个");
+                            count.setText("已装:" + mList.size() + "个");
                         }
                     }
                 } else {
@@ -173,9 +173,9 @@ public class BoxingFragment extends BaseFragment {
                             mList = FastJsonUtils.getBeanList(response, BoxListEntity.class);
                             recyclerView.setVisibility(View.VISIBLE);
                             adapter.setNewData(mList);
-                            count.setText("已装：" + mList.size() + "个");
+                            count.setText("已装:" + mList.size() + "个");
                         } else {
-                            count.setText("已装：0个");
+                            count.setText("已装:0个");
                         }
                     }
                 }

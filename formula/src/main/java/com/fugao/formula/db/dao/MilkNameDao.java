@@ -50,6 +50,7 @@ public class MilkNameDao {
             contentValues = new ContentValues();
             contentValues.put("MilkCode", StringUtils.getString(bean.MilkCode));
             contentValues.put("MilkName", StringUtils.getString(bean.MilkName));
+            contentValues.put("WardCode", StringUtils.getString(bean.WardCode));
             sqlDB.insert(Constant.MILK_NAME, null, contentValues);
         }
         sqlDB.setTransactionSuccessful();
@@ -63,12 +64,19 @@ public class MilkNameDao {
         return getMilkNameByCursor(cursor);
     }
 
+    public List<MilkBean> getMilkNameByWardCode(String wardCode) {
+        Cursor cursor = sqlDB.query(Constant.MILK_NAME, null, "WardCode='" + wardCode + "'",
+                null, null, null, null);
+        return getMilkNameByCursor(cursor);
+    }
+
     public List<MilkBean> getMilkNameByCursor(Cursor cursor) {
         List<MilkBean> beans = new ArrayList<>();
         while (cursor.moveToNext()) {
             MilkBean bean = new MilkBean();
             bean.MilkCode = cursor.getString(cursor.getColumnIndex("MilkCode"));
             bean.MilkName = cursor.getString(cursor.getColumnIndex("MilkName"));
+            bean.WardCode = cursor.getString(cursor.getColumnIndex("WardCode"));
             beans.add(bean);
         }
         return beans;

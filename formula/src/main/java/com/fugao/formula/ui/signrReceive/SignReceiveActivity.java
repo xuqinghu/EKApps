@@ -11,12 +11,16 @@ import com.fugao.formula.base.BaseActivity;
 import com.fugao.formula.constant.FormulaApi;
 import com.fugao.formula.entity.BoxListEntity;
 import com.fugao.formula.entity.PostEntity;
+import com.fugao.formula.ui.box.SelectBoxActivity;
+import com.fugao.formula.ui.signSend.SignSendActivity;
+import com.fugao.formula.utils.DateUtils;
 import com.fugao.formula.utils.DialogUtils;
 import com.fugao.formula.utils.FastJsonUtils;
 import com.fugao.formula.utils.NetWorkUtils;
 import com.fugao.formula.utils.OkHttpUtils;
 import com.fugao.formula.utils.StringUtils;
 import com.fugao.formula.utils.ToastUtils;
+import com.fugao.formula.utils.XmlDB;
 import com.fugao.formula.utils.dialog.SingleBtnDialog;
 
 import java.util.ArrayList;
@@ -37,6 +41,22 @@ public class SignReceiveActivity extends BaseActivity implements View.OnClickLis
     TextView tv_warn;
     @BindView(R.id.tv_code)
     TextView tv_code;
+    @BindView(R.id.tv_size)
+    TextView tv_size;
+    @BindView(R.id.tv_division)
+    TextView tv_division;
+    @BindView(R.id.tv_count)
+    TextView tv_count;
+    @BindView(R.id.tv_binning_person)
+    TextView tv_binning_person;
+    @BindView(R.id.tv_binning_time)
+    TextView tv_binning_time;
+    @BindView(R.id.tv_delivery_person)
+    TextView tv_delivery_person;
+    @BindView(R.id.tv_delivery_time)
+    TextView tv_delivery_time;
+    @BindView(R.id.tv_milkName)
+    TextView tv_milkName;
     private String code = "";
     private SingleBtnDialog singleBtnDialog;
     private List<BoxListEntity> mList;
@@ -85,6 +105,14 @@ public class SignReceiveActivity extends BaseActivity implements View.OnClickLis
 
     private void clearBoxInfo() {
         tv_code.setText("");
+        tv_size.setText("");
+        tv_division.setText("");
+        tv_count.setText("");
+        tv_binning_person.setText("");
+        tv_binning_time.setText("");
+        tv_delivery_person.setText("");
+        tv_delivery_time.setText("");
+        tv_milkName.setText("奶名:");
     }
 
     //扫描箱子二维码
@@ -137,9 +165,33 @@ public class SignReceiveActivity extends BaseActivity implements View.OnClickLis
                             ToastUtils.showShort(SignReceiveActivity.this, "找不到这个箱子的信息");
                         } else {
                             mList = FastJsonUtils.getBeanList(response, BoxListEntity.class);
-                            tv_code.setText(mList.get(0).MilkBoxID);
-                            showSureButton();
-                            ToastUtils.showShort(SignReceiveActivity.this, "获取成功");
+                            if ("装箱".equals(mList.get(0).MilkBoxStatus)) {
+                                ToastUtils.showShort(SignReceiveActivity.this, "这个箱子还没有被签发");
+                            } else if ("签收".equals(mList.get(0).MilkBoxStatus)) {
+                                ToastUtils.showShort(SignReceiveActivity.this, "这个箱子已经被签收了");
+                            } else if ("取消".equals(mList.get(0).MilkBoxStatus)) {
+                                ToastUtils.showShort(SignReceiveActivity.this, "此箱贴无效，可能是取消装箱导致的");
+                            } else {
+                                tv_code.setText(mList.get(0).MilkBoxID);
+                                tv_size.setText(mList.get(0).MilkBoxSpec);
+                                tv_division.setText(mList.get(0).WardName);
+                                tv_count.setText(mList.get(0).MilkQuantity);
+                                tv_binning_person.setText(mList.get(0).LoadName);
+                                tv_binning_time.setText(mList.get(0).LoadTime);
+                                tv_delivery_person.setText(mList.get(0).TransGH);
+                                tv_delivery_time.setText(mList.get(0).TransTime);
+                                String milkName = "";
+                                if (mList.get(0).MilkDetail.size() > 0) {
+                                    for (int i = 0; i < mList.get(0).MilkDetail.size(); i++) {
+                                        milkName = milkName + mList.get(0).MilkDetail.get(i).MilkName +
+                                                "/" + mList.get(0).MilkDetail.get(i).Quantity + ";";
+
+                                    }
+                                    tv_milkName.setText(milkName);
+                                }
+
+                                showSureButton();
+                            }
                         }
                     }
                 } else {
@@ -162,6 +214,10 @@ public class SignReceiveActivity extends BaseActivity implements View.OnClickLis
         PostEntity postBean = new PostEntity();
         postBean.HZID = hzId;
         postBean.CurOperation = "签收";
+        postBean.OperatorName = XmlDB.getInstance(SignReceiveActivity.this).getKeyString("userName", "");
+        postBean.OperatorGH = XmlDB.getInstance(SignReceiveActivity.this).getKeyString("userCode", "");
+        postBean.OperatorDate = DateUtils.getCurrentDate();
+        postBean.OperatorTime = DateUtils.getCurrentTime();
         postData.add(postBean);
         String json = JSON.toJSONString(postData);
         String url = FormulaApi.FORMULA_POST;

@@ -20,6 +20,7 @@ import com.fugao.formula.utils.RecyclerViewDivider;
 import com.fugao.formula.utils.StringUtils;
 import com.fugao.formula.utils.ToastUtils;
 import com.fugao.formula.utils.XmlDB;
+import com.fugao.formula.utils.swipe.util.Attributes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,10 +58,11 @@ public class SignSendActivity extends BaseActivity {
     public void initData() {
         mList = new ArrayList<>();
         upList = new ArrayList<>();
-        adapter = new SignSendAdapter(SignSendActivity.this, mList);
         //添加分割线
         recyclerView.addItemDecoration(new RecyclerViewDivider(SignSendActivity.this, LinearLayoutManager.HORIZONTAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(SignSendActivity.this));
+        adapter = new SignSendAdapter(SignSendActivity.this, mList);
+        adapter.setMode(Attributes.Mode.Single);
         recyclerView.setAdapter(adapter);
     }
 
@@ -83,6 +85,10 @@ public class SignSendActivity extends BaseActivity {
     @Override
     public void receivePersonCode(String result) {
         super.receivePersonCode(result);
+        if (!StringUtils.StringIsEmpty(userGH) && !userGH.equals(result)) {
+            upList.clear();
+            adapter.setData(upList);
+        }
         userGH = result;
         tv_userGH.setText(result);
     }
@@ -102,8 +108,7 @@ public class SignSendActivity extends BaseActivity {
         List<PostEntity> postData = new ArrayList<>();
         PostEntity postBean = new PostEntity();
         postBean.HZID = hzId;
-        postBean.OperatorName = XmlDB.getInstance(SignSendActivity.this).getKeyString("userName", "");
-        postBean.OperatorGH = XmlDB.getInstance(SignSendActivity.this).getKeyString("userCode", "");
+        postBean.OperatorGH = userGH;
         postBean.OperatorDate = DateUtils.getCurrentDate();
         postBean.OperatorTime = DateUtils.getCurrentTime();
         postBean.CurOperation = "签发";
@@ -119,10 +124,17 @@ public class SignSendActivity extends BaseActivity {
                         ToastUtils.showShort(SignSendActivity.this, "没有数据");
                     } else {
                         List<BoxListEntity> beans = FastJsonUtils.getBeanList(response, BoxListEntity.class);
-                        upList.add(beans.get(0));
-                        adapter.setData(upList);
-                        ToastUtils.showShort(SignSendActivity.this, "签发成功");
-                        tv_userGH.setText("请先扫描员工卡");
+                        if (StringUtils.StringIsEmpty(beans.get(0).HZID) && "已签发".equals(beans.get(0).MilkBoxStatus)) {
+                            ToastUtils.showShort(SignSendActivity.this, "这个箱子已经被签发了");
+                        } else if ("签收".equals(beans.get(0).MilkBoxStatus)) {
+                            ToastUtils.showShort(SignSendActivity.this, "这个箱子已经被签收了");
+                        } else if ("取消".equals(beans.get(0).MilkBoxStatus)) {
+                            ToastUtils.showShort(SignSendActivity.this, "此箱贴无效，可能是取消装箱导致的");
+                        } else {
+                            upList.add(beans.get(0));
+                            adapter.setData(upList);
+                            ToastUtils.showShort(SignSendActivity.this, "签发成功");
+                        }
                     }
 
                 } else {

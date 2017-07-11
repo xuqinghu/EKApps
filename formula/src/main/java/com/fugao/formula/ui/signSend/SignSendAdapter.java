@@ -115,6 +115,7 @@ public class SignSendAdapter extends RecyclerSwipeAdapter<SignSendAdapter.Simple
                 cancel(mData.get(position));
             }
         });
+        mItemManger.bind(viewHolder.itemView, position);
 
     }
 

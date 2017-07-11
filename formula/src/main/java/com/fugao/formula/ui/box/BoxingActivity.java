@@ -14,7 +14,6 @@ import com.fugao.formula.constant.Constant;
 import com.fugao.formula.db.DataBaseInfo;
 import com.fugao.formula.db.dao.MilkNameDao;
 import com.fugao.formula.utils.StringUtils;
-import com.fugao.formula.utils.ToastUtils;
 import com.fugao.formula.utils.XmlDB;
 
 import java.util.ArrayList;
@@ -36,10 +35,10 @@ public class BoxingActivity extends BaseActivity {
     private ArrayList<Fragment> mFragments = new ArrayList<>();
     private CheckAdviceFragment fragment1;
     private BoxingFragment fragment2;
+    private BoxingFragment1 fragment3;
     private String[] mTitles = {"医嘱核对", "今日装箱"};
     private String time;
     public MilkNameDao milkNameDao;
-    private String adviceIds = "";
 
     @Override
     public void setContentView() {
@@ -58,7 +57,8 @@ public class BoxingActivity extends BaseActivity {
         fragment1 = new CheckAdviceFragment();
         mFragments.add(fragment1);
         fragment2 = new BoxingFragment();
-        mFragments.add(fragment2);
+        fragment3 = new BoxingFragment1();
+        mFragments.add(fragment3);
         division.setVisibility(View.VISIBLE);
         division.setText(XmlDB.getInstance(BoxingActivity.this).getKeyStringValue("divisionName", ""));
         tl.setTabData(mTitles, this, R.id.fl_change, mFragments);
@@ -70,8 +70,7 @@ public class BoxingActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Constant.CHECK_ALL = true;
-                fragment1.getAllMilkNo();
-                fragment1.checkYZ(tv_all_sure);
+                fragment1.checkYZ(tv_all_sure, "");
             }
         });
         division.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +87,11 @@ public class BoxingActivity extends BaseActivity {
                 tl.setCurrentTab(i);
                 if ("医嘱核对".equals(mTitles[i])) {
                     division.setVisibility(View.VISIBLE);
+                    if (!StringUtils.StringIsEmpty(time) && !time.contains(";")) {
+                        tv_all_sure.setVisibility(View.VISIBLE);
+                    } else {
+                        tv_all_sure.setVisibility(View.GONE);
+                    }
                 } else {
                     //今日装箱隐藏全部核对和病区两个按钮
                     division.setVisibility(View.GONE);
@@ -136,14 +140,7 @@ public class BoxingActivity extends BaseActivity {
     @Override
     public void receiveMilkCode(String result) {
         super.receiveMilkCode(result);
-        fragment1.getAdviceIDList(result);
-        adviceIds = fragment1.getAdviceIDs();
-        if (StringUtils.StringIsEmpty(adviceIds)) {
-            ToastUtils.showShort(BoxingActivity.this, "没有找到这个奶瓶，请核查下");
-        } else {
-            fragment1.checkYZ(tv_all_sure);
-        }
-
+        fragment1.checkYZ(tv_all_sure, result);
     }
 
     @Override

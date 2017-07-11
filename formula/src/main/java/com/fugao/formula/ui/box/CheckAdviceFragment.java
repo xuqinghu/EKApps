@@ -1,8 +1,10 @@
 package com.fugao.formula.ui.box;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -66,10 +68,12 @@ public class CheckAdviceFragment extends BaseFragment {
     private ListDialog listDialog;
     private MilkNameDao milkNameDao;
     private BoxingActivity activity;
-    private String milkCode = "";
+    private String milk_code = "";
     private AdviceEntity checkBean;
     private List<MilkDetail> adviceIDList;
     private int checkCount = 0;
+    private boolean[] isChecked;
+    private boolean checkFlag = false;
 
     @Override
     public View setContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,7 +86,7 @@ public class CheckAdviceFragment extends BaseFragment {
         activity = (BoxingActivity) fatherActivity;
         refresh_advice.setColorSchemeColors(getResources().getIntArray(R.array.color_array));
         name.setText("核对人:" + XmlDB.getInstance(fatherActivity).getKeyString("userName", ""));
-
+        Constant.SELECT_MILK_NAME.clear();
     }
 
     @Override
@@ -94,15 +98,11 @@ public class CheckAdviceFragment extends BaseFragment {
         mList = new ArrayList<>();
         milks = new ArrayList<>();
         adviceIDList = new ArrayList<>();
-        milks = milkNameDao.getMilkName();
-        MilkBean milkBean = new MilkBean();
-        milkBean.MilkName = "全部";
-        milkBean.MilkCode = "";
-        milks.add(0, milkBean);
+        milks = milkNameDao.getMilkNameByWardCode(XmlDB.getInstance(fatherActivity).getKeyString("divisionCode", ""));
         //添加分割线
         recyclerView.addItemDecoration(new RecyclerViewDivider(fatherActivity, LinearLayoutManager.HORIZONTAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(fatherActivity));
-        mAdapter = new CheckAdviceAdapter(fatherActivity, mList);
+        mAdapter = new CheckAdviceAdapter(fatherActivity, mList, personCount, milkCount);
         adapter = new MilkNameAdapter(R.layout.milk_name_item, fatherActivity);
         mAdapter.setMode(Attributes.Mode.Single);
         recyclerView.setAdapter(mAdapter);
@@ -119,15 +119,92 @@ public class CheckAdviceFragment extends BaseFragment {
             public void returnResult(MilkBean result) {
                 if ("全部".equals(result.MilkName)) {
                     select_milk.setText("奶名");
-                    milkCode = "";
+                    milk_code = "";
                 } else {
                     select_milk.setText(result.MilkName);
-                    milkCode = result.MilkCode;
+                    milk_code = result.MilkCode;
                 }
                 checkNetWork();
             }
         });
         listDialog.show();
+    }
+
+    //选择奶名，多选
+    private void selectMilkName1() {
+        isChecked = new boolean[milks.size()];
+        for (int i = 0; i < milks.size(); i++) {
+            for (int j = 0; j < Constant.SELECT_MILK_NAME.size(); j++) {
+                if (Constant.SELECT_MILK_NAME.get(j).MilkCode.equals(milks.get(i).MilkCode)) {
+                    isChecked[i] = true;
+                    checkFlag = true;
+                }
+            }
+            if (checkFlag = false) {
+                isChecked[i] = false;
+            }
+            checkFlag = false;
+        }
+        final String[] milkName = new String[milks.size()];
+        final String[] milkCode = new String[milks.size()];
+        final List<MilkBean> milkBeans = new ArrayList<>();
+        milkBeans.addAll(Constant.SELECT_MILK_NAME);
+        for (int i = 0; i < milks.size(); i++) {
+            milkName[i] = milks.get(i).MilkName;
+            milkCode[i] = milks.get(i).MilkCode;
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(fatherActivity);
+        builder.setIcon(R.mipmap.milk);
+        builder.setTitle("选择奶名");
+        builder.setMultiChoiceItems(milkName, isChecked, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                if (isChecked) {
+                    MilkBean milkBean = new MilkBean();
+                    milkBean.MilkName = milkName[which];
+                    milkBean.MilkCode = milkCode[which];
+                    milkBeans.add(milkBean);
+                } else {
+                    //移除这一项
+                    for (int i = 0; i < milkBeans.size(); i++) {
+                        if (milkCode[which].equals(milkBeans.get(i).MilkCode)) {
+                            milkBeans.remove(i);
+                            i--;
+                        }
+                    }
+                }
+            }
+        });
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Constant.SELECT_MILK_NAME = milkBeans;
+                milk_code = "";
+                String milk_name = "";
+                for (int i = 0; i < Constant.SELECT_MILK_NAME.size(); i++) {
+                    milk_code = milk_code + Constant.SELECT_MILK_NAME.get(i).MilkCode + ";";
+                    milk_name = milk_name + Constant.SELECT_MILK_NAME.get(i).MilkName + ";";
+                }
+                if (!StringUtils.StringIsEmpty(milk_code)) {
+                    milk_code = milk_code.substring(0, milk_code.length() - 1);
+                    milk_name = milk_name.substring(0, milk_name.length() - 1);
+                }
+                checkNetWork();
+                if ("".equals(milk_code)) {
+                    select_milk.setText("奶名");
+                } else {
+                    select_milk.setText(milk_name);
+                }
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+
     }
 
     //检查网络情况
@@ -158,7 +235,7 @@ public class CheckAdviceFragment extends BaseFragment {
         DialogUtils.showProgressDialog(fatherActivity, "正在加载数据...");
         String time = XmlDB.getInstance(fatherActivity).getKeyString("time", "");
         String divisionCode = XmlDB.getInstance(fatherActivity).getKeyString("divisionCode", "");
-        String url = FormulaApi.getAdviceData("4", divisionCode, milkCode, time);
+        String url = FormulaApi.getAdviceData("4", divisionCode, milk_code, time);
         OkHttpUtils.ResultCallback<String> callback = new OkHttpUtils.ResultCallback<String>() {
             @Override
             public void onSuccess(String response, int code) {
@@ -167,10 +244,13 @@ public class CheckAdviceFragment extends BaseFragment {
                     if (response != null) {
                         if ("[]".equals(response)) {
                             ToastUtils.showShort(fatherActivity, "没有数据");
+                            milkCount.setText("瓶数:0");
+                            personCount.setText("人数:0");
                         } else {
+                            mList.clear();
                             mList = FastJsonUtils.getBeanList(response, AdviceEntity.class);
                             recyclerView.setVisibility(View.VISIBLE);
-                            mAdapter.setData(mList);
+                            mAdapter.setData(mList, milk_code);
                             showCount();
                         }
                     }
@@ -190,18 +270,17 @@ public class CheckAdviceFragment extends BaseFragment {
     }
 
     //核对医嘱
-    public void checkYZ(final TextView all_sure) {
+    public void checkYZ(final TextView all_sure, String bottleId) {
         List<PostEntity> postData = new ArrayList<>();
         PostEntity postBean = new PostEntity();
         postBean.OperatorName = XmlDB.getInstance(fatherActivity).getKeyString("userName", "");
         postBean.OperatorGH = XmlDB.getInstance(fatherActivity).getKeyString("userCode", "");
         postBean.OperatorDate = DateUtils.getCurrentDate();
         postBean.OperatorTime = DateUtils.getCurrentTime();
-        if (Constant.CHECK_ALL) {
-            postBean.NPID = getAllMilkNo();
-        } else {
-            postBean.NPID = getAdviceIDs();
-        }
+        postBean.ExecFrequency = XmlDB.getInstance(fatherActivity).getKeyString("time", "");
+        postBean.NPID = bottleId;
+        postBean.MilkName = milk_code;
+        postBean.WardCode = XmlDB.getInstance(fatherActivity).getKeyString("divisionCode", "");
         postBean.CurOperation = "核对医嘱";
         postData.add(postBean);
         String json = JSON.toJSONString(postData);
@@ -217,16 +296,24 @@ public class CheckAdviceFragment extends BaseFragment {
                             ToastUtils.showShort(fatherActivity, "没有数据");
                         } else {
                             List<AdviceEntity> beans = FastJsonUtils.getBeanList(response, AdviceEntity.class);
-                            if (beans != null && !Constant.CHECK_ALL) {
-                                mList.remove(checkBean);
-                                mList.add(0, beans.get(0));
-                            } else if (beans != null && Constant.CHECK_ALL) {
+                            if (StringUtils.StringIsEmpty(beans.get(0).ShowMsg)) {
+                                mList.clear();
                                 mList = beans;
+                                mAdapter.setData(mList, milk_code);
+                                showCount();
+                                ToastUtils.showShort(fatherActivity, "核对成功");
+                            } else {
+                                String msg = beans.get(0).ShowMsg;
+                                if ("未找到相应的医嘱".equals(msg)) {
+                                    ToastUtils.showShort(fatherActivity, "核对失败，未找到相应的医嘱");
+                                } else if ("医嘱变更".equals(msg)) {
+                                    showWarnDialog("医嘱有变更，请打印新医嘱条码");
+                                } else if ("该牛奶未在执行时间内找到".equals(msg)) {
+                                    showWarnDialog("请扫描所选时间内的奶瓶条码");
+                                } else if ("牛奶已核对".equals(msg)) {
+                                    ToastUtils.showShort(fatherActivity, "已核对，无需重复核对");
+                                }
                             }
-                            Constant.CHECK_ALL = false;
-                            mAdapter.setData(mList);
-                            showCount();
-                            ToastUtils.showShort(fatherActivity, "核对成功");
                             all_sure.setVisibility(View.GONE);
                         }
                     }
@@ -262,7 +349,7 @@ public class CheckAdviceFragment extends BaseFragment {
         select_milk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectMilkName();
+                selectMilkName1();
 
             }
         });

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.fugao.formula.R;
+import com.fugao.formula.constant.Constant;
 import com.fugao.formula.constant.FormulaApi;
 import com.fugao.formula.entity.AdviceEntity;
 import com.fugao.formula.entity.MilkDetail;
@@ -65,13 +66,18 @@ public class CheckAdviceAdapter extends RecyclerSwipeAdapter<CheckAdviceAdapter.
 
     private Activity activity;
     private List<AdviceEntity> mData;
+    private TextView personCount, milkCount;
+    private String milkCode = "";
 
-    public CheckAdviceAdapter(Activity activity, List<AdviceEntity> data) {
+    public CheckAdviceAdapter(Activity activity, List<AdviceEntity> data, TextView t1, TextView t2) {
         this.activity = activity;
         this.mData = data;
+        this.personCount = t1;
+        this.milkCount = t2;
     }
 
-    public void setData(List<AdviceEntity> data) {
+    public void setData(List<AdviceEntity> data, String milkCode) {
+        this.milkCode = milkCode;
         this.mData = data;
         notifyDatasetChanged();
     }
@@ -98,11 +104,10 @@ public class CheckAdviceAdapter extends RecyclerSwipeAdapter<CheckAdviceAdapter.
         List<PostEntity> postData = new ArrayList<>();
         DialogUtils.showProgressDialog(activity, "取消核对中...");
         PostEntity postBean = new PostEntity();
-        postBean.OperatorName = XmlDB.getInstance(activity).getKeyString("userName", "");
-        postBean.OperatorGH = XmlDB.getInstance(activity).getKeyString("userCode", "");
-        postBean.OperatorDate = DateUtils.getCurrentDate();
-        postBean.OperatorTime = DateUtils.getCurrentTime();
+        postBean.WardCode = XmlDB.getInstance(activity).getKeyString("divisionCode", "");
+        postBean.ExecFrequency = XmlDB.getInstance(activity).getKeyString("time", "");
         postBean.NPID = getAdviceIDs(bean.FormulaMilkDetail);
+        postBean.MilkName = milkCode;
         postBean.CurOperation = "取消核对";
         postData.add(postBean);
         String json = JSON.toJSONString(postData);
@@ -118,9 +123,10 @@ public class CheckAdviceAdapter extends RecyclerSwipeAdapter<CheckAdviceAdapter.
                         } else {
                             List<AdviceEntity> beans = FastJsonUtils.getBeanList(response, AdviceEntity.class);
                             if (beans.size() > 0) {
-                                mData.remove(bean);
-                                mData.add(0, beans.get(0));
-                                setData(mData);
+                                mData.clear();
+                                mData = beans;
+                                setData(mData, milkCode);
+                                update(mData);
                                 ToastUtils.showShort(activity, "取消核对成功");
                             }
                         }
@@ -137,6 +143,32 @@ public class CheckAdviceAdapter extends RecyclerSwipeAdapter<CheckAdviceAdapter.
             }
         };
         OkHttpUtils.post(url, callback, json);
+    }
+
+    //刷新人数和瓶数
+    private void update(List<AdviceEntity> beans) {
+        int count = 0;
+        List<AdviceEntity> beans1 = new ArrayList<>();
+        List<AdviceEntity> beans2 = new ArrayList<>();
+        //筛选未核对数据
+        for (AdviceEntity bean : beans) {
+            if ("0".equals(bean.AdviceStatus)) {
+                beans1.add(bean);
+            }
+        }
+        personCount.setText("人数:" + beans1.size());
+        //筛选已核对数据
+        for (AdviceEntity bean : beans) {
+            if ("1".equals(bean.AdviceStatus)) {
+                beans2.add(bean);
+            }
+        }
+        Constant.ADVICE_BOX_LIST = beans2;
+        //计算已核对的瓶数
+        for (AdviceEntity bean : beans2) {
+            count = count + Integer.parseInt(bean.Quantity);
+        }
+        milkCount.setText("瓶数:" + count);
     }
 
     @Override
@@ -157,8 +189,11 @@ public class CheckAdviceAdapter extends RecyclerSwipeAdapter<CheckAdviceAdapter.
             public void onClick(View view) {
                 //关闭侧滑
                 mItemManger.closeAllItems();
-                Log.d("TAG", position + "");
-                cancel(mData.get(position));
+                if ("0".equals(mData.get(position).AdviceStatus)) {
+                    ToastUtils.showShort(activity, "这条医嘱还没有被核对");
+                } else if ("1".equals(mData.get(position).AdviceStatus)) {
+                    cancel(mData.get(position));
+                }
             }
         });
         viewHolder.bedNo.setText(item.BedNo);

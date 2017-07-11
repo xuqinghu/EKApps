@@ -1,11 +1,15 @@
 package com.fugao.formula.ui.box;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -58,6 +62,9 @@ public class SelectBoxActivity extends BaseActivity {
     private TwoBtnDialog twoBtnDialog;
     private int count = 0;
     private int checkCount = 0;
+    private int selectCount = 0;
+    private List<AdviceEntity> selectList;
+
 
     @Override
     public void setContentView() {
@@ -67,13 +74,17 @@ public class SelectBoxActivity extends BaseActivity {
     @Override
     public void initView() {
         refresh_box.setColorSchemeColors(getResources().getIntArray(R.array.color_array));
+        getCount();
+        tv_count.setText("待装箱瓶数:" + count);
+        tv_name.setText("装箱人:" + XmlDB.getInstance(SelectBoxActivity.this).getKeyString("userName", ""));
+        tv_division.setText("病区:" + XmlDB.getInstance(SelectBoxActivity.this).getKeyString("divisionName", ""));
+
+    }
+
+    private void getCount() {
         for (AdviceEntity bean : Constant.ADVICE_BOX_LIST) {
             count = count + Integer.parseInt(bean.Quantity);
         }
-        tv_count.setText("待装箱瓶数：" + count);
-        tv_name.setText("装箱人：" + XmlDB.getInstance(SelectBoxActivity.this).getKeyString("userName", ""));
-        tv_division.setText("病区：" + XmlDB.getInstance(SelectBoxActivity.this).getKeyString("divisionName", ""));
-
     }
 
     @Override
@@ -81,6 +92,7 @@ public class SelectBoxActivity extends BaseActivity {
         twoBtnDialog = new TwoBtnDialog(SelectBoxActivity.this);
         singleBtnDialog = new SingleBtnDialog(SelectBoxActivity.this);
         mList = new ArrayList<>();
+        selectList = new ArrayList<>();
         recyclerView.addItemDecoration(new RecyclerViewDivider(this, LinearLayoutManager.HORIZONTAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new SelectBoxAdapter(R.layout.item_select_box, mList);
@@ -125,6 +137,7 @@ public class SelectBoxActivity extends BaseActivity {
                             ToastUtils.showShort(SelectBoxActivity.this, "没有数据");
                         } else {
                             recyclerView.setVisibility(View.VISIBLE);
+                            mList.clear();
                             mList = FastJsonUtils.getBeanList(response, BoxListEntity.class);
                             adapter.setNewData(mList);
                         }
@@ -169,13 +182,60 @@ public class SelectBoxActivity extends BaseActivity {
                 checkNetWork();
             }
         });
+        tv_count.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCountDialog();
+            }
+        });
+    }
+
+    private void showCountDialog() {
+        LayoutInflater factory = LayoutInflater.from(SelectBoxActivity.this);//提示框
+        final View view = factory.inflate(R.layout.dialog_count, null);//这里必须是final的
+        final EditText edit = (EditText) view.findViewById(R.id.et_count);//获得输入框对象
+        new AlertDialog.Builder(SelectBoxActivity.this)
+                .setTitle("设置人数")//提示框标题
+                .setView(view)
+                .setPositiveButton("确定",//提示框的两个按钮
+                        new android.content.DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                if (!StringUtils.StringIsEmpty(edit.getText().toString()) &&
+                                        !edit.getText().toString().equals("0")) {
+                                    getSelectList(Integer.parseInt(edit.getText().toString()));
+                                }
+                            }
+                        }).setNegativeButton("取消", null).create().show();
+    }
+
+    //获取设置的待装箱瓶数
+    private void getSelectList(int c) {
+        if (Constant.ADVICE_BOX_LIST.size() >= c) {
+            selectCount = 0;
+            selectList.clear();
+            for (int i = 0; i < c; i++) {
+                AdviceEntity bean = Constant.ADVICE_BOX_LIST.get(i);
+                selectList.add(bean);
+            }
+            for (AdviceEntity bean : selectList) {
+                selectCount = selectCount + Integer.parseInt(bean.Quantity);
+            }
+            tv_count.setText("待装箱瓶数:" + selectCount);
+        } else {
+            showWarnDialog("设置的人数比需要装箱的人数还大");
+            tv_count.setText("待装箱瓶数:" + count);
+            selectCount = 0;
+        }
+
     }
 
     //提示是否装在此箱
     private void showTwoDialog(final BoxListEntity box) {
         twoBtnDialog.setDialogCloseImageView(View.GONE);
         twoBtnDialog.setDialogTitleTextView("温馨提示！");
-        twoBtnDialog.setDialogContentTextView("是否要装在" + box.MilkBoxID + "箱子？");
+        twoBtnDialog.setDialogContentTextView("是否要装在" + box.MilkBoxID + "号箱子？");
         twoBtnDialog.setLeftTextView("否");
         twoBtnDialog.setRightTextView("是");
         twoBtnDialog.setCanceledOnTouchOutside(false);
@@ -204,14 +264,22 @@ public class SelectBoxActivity extends BaseActivity {
         postBean.MilkBoxStatus = bean.MilkBoxStatus;
         postBean.MilkBoxSpec = bean.MilkBoxSpec;
         postBean.HZID = bean.HZID;
-        postBean.MilkQuantity = Integer.parseInt(bean.MilkQuantity) + checkCount + "";
+        if (selectCount == 0) {
+            postBean.MilkQuantity = Integer.parseInt(bean.MilkQuantity) + count + "";
+        } else {
+            postBean.MilkQuantity = Integer.parseInt(bean.MilkQuantity) + selectCount + "";
+        }
         postBean.WardName = XmlDB.getInstance(SelectBoxActivity.this).getKeyString("divisionName", "");
         postBean.WardCode = XmlDB.getInstance(SelectBoxActivity.this).getKeyString("divisionCode", "");
         postBean.OperatorName = XmlDB.getInstance(SelectBoxActivity.this).getKeyString("userName", "");
         postBean.OperatorGH = XmlDB.getInstance(SelectBoxActivity.this).getKeyString("userCode", "");
         postBean.OperatorDate = DateUtils.getCurrentDate();
         postBean.OperatorTime = DateUtils.getCurrentTime();
-        postBean.NPID = getAdviceIDs();
+        if (selectCount == 0) {
+            postBean.NPID = getAdviceIDs(Constant.ADVICE_BOX_LIST);
+        } else {
+            postBean.NPID = getAdviceIDs(selectList);
+        }
         postBean.CurOperation = "装箱";
         postData.add(postBean);
         String json = JSON.toJSONString(postData);
@@ -226,15 +294,31 @@ public class SelectBoxActivity extends BaseActivity {
                             ToastUtils.showShort(SelectBoxActivity.this, "没有数据");
                         } else {
                             List<BoxListEntity> beans = FastJsonUtils.getBeanList(response, BoxListEntity.class);
-                            if (beans.size() > 0) {
+                            if ("签发".equals(beans.get(0).MilkBoxStatus) && StringUtils.StringIsEmpty(beans.get(0).HZID)) {
+                                ToastUtils.showShort(SelectBoxActivity.this, "这个箱子已经被签发了");
+                                checkNetWork();
+                            } else if ("签收".equals(beans.get(0).MilkBoxStatus) && StringUtils.StringIsEmpty(beans.get(0).HZID)) {
+                                ToastUtils.showShort(SelectBoxActivity.this, "这个箱子已经被签收了");
+                                checkNetWork();
+                            } else if ("已被其他病区装箱".equals(beans.get(0).MilkBoxStatus)) {
+                                ToastUtils.showShort(SelectBoxActivity.this, "这个箱子已经被其他病区使用");
+                                checkNetWork();
+                            } else {
                                 mList.remove(bean);
                                 mList.add(0, beans.get(0));
                                 adapter.setNewData(mList);
                                 ToastUtils.showShort(SelectBoxActivity.this, "装箱成功");
                                 XmlDB.getInstance(SelectBoxActivity.this).saveKey("boxing", "yes");
-                                count = 0;
-                                Constant.ADVICE_BOX_LIST = new ArrayList<>();
+                                if (selectCount == 0) {
+                                    count = 0;
+                                    Constant.ADVICE_BOX_LIST = new ArrayList<>();
+                                } else {
+                                    count = count - selectCount;
+                                    Constant.ADVICE_BOX_LIST.removeAll(selectList);
+                                    selectCount = 0;
+                                }
                                 tv_count.setText("待装箱瓶数：" + count);
+                                checkNetWork();
                             }
                         }
                     }
@@ -252,12 +336,12 @@ public class SelectBoxActivity extends BaseActivity {
         OkHttpUtils.post(url, callback, json);
     }
 
-    private String getAdviceIDs() {
+    private String getAdviceIDs(List<AdviceEntity> beans) {
         String adviceIds = "";
-        if (Constant.ADVICE_BOX_LIST.size() > 0) {
-            for (int i = 0; i < Constant.ADVICE_BOX_LIST.size(); i++) {
-                for (int j = 0; j < Constant.ADVICE_BOX_LIST.get(i).FormulaMilkDetail.size(); j++) {
-                    adviceIds = adviceIds + Constant.ADVICE_BOX_LIST.get(i).FormulaMilkDetail.get(j).MilkNo + ";";
+        if (beans.size() > 0) {
+            for (int i = 0; i < beans.size(); i++) {
+                for (int j = 0; j < beans.get(i).FormulaMilkDetail.size(); j++) {
+                    adviceIds = adviceIds + beans.get(i).FormulaMilkDetail.get(j).MilkNo + ";";
                 }
             }
         }
@@ -267,10 +351,10 @@ public class SelectBoxActivity extends BaseActivity {
         return adviceIds;
     }
 
+
     @Override
     public void initIntent() {
-        Intent intent = getIntent();
-        checkCount = Integer.parseInt(intent.getStringExtra("count"));
+
     }
 
     @Override

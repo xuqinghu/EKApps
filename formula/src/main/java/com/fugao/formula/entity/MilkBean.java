@@ -10,4 +10,5 @@ import java.io.Serializable;
 public class MilkBean implements Serializable {
     public String MilkCode;
     public String MilkName;
+    public String WardCode;
 }

@@ -45,4 +45,8 @@ public class PostEntity implements Serializable {
     public String OperatorName;
     public String IsZx;
     public String CurOperation;
+    //执行时间
+    public String ExecFrequency;
+    //奶名
+    public String MilkName;
 }

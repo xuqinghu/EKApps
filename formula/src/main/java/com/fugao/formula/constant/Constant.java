@@ -1,6 +1,7 @@
 package com.fugao.formula.constant;
 
 import com.fugao.formula.entity.AdviceEntity;
+import com.fugao.formula.entity.MilkBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,4 +21,5 @@ public class Constant {
     public static String MILK_NAME = "milk_name";
     public static List<AdviceEntity> ADVICE_BOX_LIST = new ArrayList<>();
     public static boolean CHECK_ALL=false;
+    public static List<MilkBean> SELECT_MILK_NAME=new ArrayList<>();
 }

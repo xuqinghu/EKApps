@@ -49,7 +49,8 @@ public class BoxDetailActivity extends BaseActivity {
     @BindView(R.id.tv_box_detail_acceptDate)
     TextView acceptDate;
     private BoxListEntity boxListEntity;
-    private BoxDetaiAdviceAdapter adapter;
+    //    private BoxDetaiAdviceAdapter adapter;
+    private BoxDetailAdviceAdapter1 adapter;
     private List<AdviceEntity> mList;
 
     @Override
@@ -64,15 +65,20 @@ public class BoxDetailActivity extends BaseActivity {
 
     @Override
     public void initData() {
-        code.setText("奶箱：" + boxListEntity.MilkBoxID);
-        count.setText("奶瓶总数：" + boxListEntity.MilkQuantity);
+        if ("0".equals(boxListEntity.MilkBoxID)) {
+            code.setText("备用奶");
+            count.setText("奶瓶总数：" + boxListEntity.MilkQuantity + "/" + boxListEntity.MilkJL);
+        } else {
+            code.setText("奶箱：" + boxListEntity.MilkBoxID);
+            count.setText("奶瓶总数：" + boxListEntity.MilkQuantity);
+        }
         size.setText("规格：" + boxListEntity.MilkBoxSpec);
         if (!StringUtils.StringIsEmpty(boxListEntity.LoadTime)) {
             binningDate.setText("装箱时间：" + boxListEntity.LoadTime.substring(11, boxListEntity.LoadTime.length()));
         }
         division.setText("病区：" + boxListEntity.WardName);
         binningPerson.setText("装箱人：" + boxListEntity.LoadName);
-        deliveryPerson.setText("配送员：" + StringUtils.getString(boxListEntity.TransName));
+        deliveryPerson.setText("配送员：" + StringUtils.getString(boxListEntity.TransGH));
         if (!StringUtils.StringIsEmpty(boxListEntity.TransTime)) {
             deliveryDate.setText("配送时间：" + boxListEntity.TransTime.substring(11, boxListEntity.LoadTime.length()));
         } else {
@@ -85,14 +91,15 @@ public class BoxDetailActivity extends BaseActivity {
             acceptDate.setText("接收时间：");
         }
         mList = new ArrayList<>();
-        if (boxListEntity.MilkDetail != null && boxListEntity.MilkDetail.size() > 0) {
-            mList = boxListEntity.MilkDetail;
-        }
-        adapter = new BoxDetaiAdviceAdapter(R.layout.activity_box_detail_item, mList);
+        adapter = new BoxDetailAdviceAdapter1(BoxDetailActivity.this, mList);
         //添加分割线
         recyclerView.addItemDecoration(new RecyclerViewDivider(BoxDetailActivity.this, LinearLayoutManager.HORIZONTAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(BoxDetailActivity.this));
         recyclerView.setAdapter(adapter);
+        if (boxListEntity.MilkDetail != null && boxListEntity.MilkDetail.size() > 0) {
+            mList = boxListEntity.MilkDetail;
+            adapter.setData(mList, boxListEntity.MilkBoxStatus, boxListEntity.HZID, boxListEntity.MilkBoxID);
+        }
     }
 
     @Override

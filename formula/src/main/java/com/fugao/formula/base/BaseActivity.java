@@ -53,8 +53,9 @@ public abstract class BaseActivity extends AppCompatActivity {
                 if (!StringUtils.StringIsEmpty(result) && result.contains("PF")) {
                     receiveBoxCode(result);
                 } else if (!StringUtils.StringIsEmpty(result) && result.contains("S")) {
-                    result = result.replace("S", "");
                     receiveMilkCode(result);
+                } else if (!StringUtils.StringIsEmpty(result) && result.contains("BY")) {
+                    receiveBoxCode(result);
                 } else {
                     receivePersonCode(result);
                 }

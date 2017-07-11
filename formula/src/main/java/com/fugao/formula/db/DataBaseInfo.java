@@ -14,7 +14,7 @@ import com.fugao.formula.constant.Constant;
 public class DataBaseInfo {
     private String DB_NAME = "breast.db";
 
-    private int DB_VERSION = 30;
+    private int DB_VERSION = 31;
 
     private SQLiteDatabase sqlDB;
     public static DataBaseInfo dataBaseInfoCurrent;
@@ -96,7 +96,8 @@ public class DataBaseInfo {
                     + " (Name varchar(30)," + "State varchar(50))";
             db.execSQL(timeList);
             String milkName = "CREATE TABLE " + Constant.MILK_NAME
-                    + " (MilkCode varchar(30)," + "MilkName varchar(50))";
+                    + " (MilkCode varchar(30)," + "MilkName varchar(50)," +
+                    "WardCode varchar(50))";
             db.execSQL(milkName);
         }
 

@@ -40,6 +40,8 @@ public class BoxListEntity implements Serializable {
     public String RevTime;
     //汇总ID
     public String HZID;
+    //剂量
+    public String MilkJL;
     public List<AdviceEntity> MilkDetail;
 
 
