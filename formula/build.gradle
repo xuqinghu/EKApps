@@ -1,5 +1,13 @@
 apply plugin: 'com.android.application'
 android {
+    signingConfigs {
+        infusion {
+            keyAlias 'fugao'
+            keyPassword '12345678'
+            storeFile file('D:\\EKApps\\key\\formula')
+            storePassword '12345678'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
 
