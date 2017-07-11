@@ -4,38 +4,41 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp">
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp">
 
         <TextView
             android:id="@+id/tv_boxing_deptName"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:text="科室：营养室"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
+            android:text="科室:"
             android:textColor="@color/text_blue"
-            android:textSize="@dimen/txt_mid" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/tv_boxing_userName"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1.2"
-            android:text="操作人：高晓"
+            android:layout_centerInParent="true"
+            android:text="操作人:"
             android:textColor="@color/text_blue"
-            android:textSize="@dimen/txt_mid" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/tv_boxing_count"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:text="已装：6个"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:text="已装:0个"
             android:textColor="@color/text_blue"
-            android:textSize="@dimen/txt_mid" />
-    </LinearLayout>
+            android:textSize="15sp" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

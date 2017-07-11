@@ -28,6 +28,7 @@
         <activity android:name=".ui.box.SelectActivity"></activity>
         <activity android:name=".ui.box.SelectBoxActivity"></activity>
         <activity android:name=".ui.box.BoxDetailActivity"></activity>
+        <activity android:name=".ui.box.PersonDetailActivity"></activity>
         <activity android:name=".ui.box.AdviceDetailActivity"></activity>
         <activity android:name=".ui.MainActivity"></activity>
         <activity

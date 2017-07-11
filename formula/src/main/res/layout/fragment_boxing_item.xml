@@ -4,28 +4,61 @@
     android:layout_height="50dp"
     android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tv_milk_code"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
         android:layout_weight="1.5"
         android:gravity="center"
-        android:text="奶箱编号"
-        android:textColor="@color/text_grey"
-        android:textSize="15sp" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tv_milk_size"
+        <TextView
+            android:id="@+id/tv_milk_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="52"
+            android:textColor="@color/text_red"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_milk_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="52"
+            android:textColor="@color/text_red"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_marginLeft="1dp"
         android:layout_weight="1.5"
         android:gravity="center"
-        android:text="奶箱规格"
-        android:textColor="@color/text_grey"
-        android:textSize="15sp" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_milk_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="奶箱规格"
+            android:textColor="@color/text_grey"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_milk_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="1dp"
+            android:gravity="center"
+            android:text="奶箱规格"
+            android:textColor="@color/text_grey"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/tv_count"

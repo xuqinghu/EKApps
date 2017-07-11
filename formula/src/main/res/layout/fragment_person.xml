@@ -8,57 +8,37 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
+        android:layout_marginTop="5dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true">
-
-            <TextView
-                android:id="@+id/tv_check_advice_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="核对人:高晓"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/tv_check_advice_personCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="2dp"
-                android:text="人数:0"
-                android:textColor="@color/text_green"
-                android:textSize="15sp" />
-
-            <TextView
-                android:id="@+id/tv_check_advice_milkCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="2dp"
-                android:text="瓶数:0"
-                android:textColor="@color/text_blue"
-                android:textSize="15sp" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/btn_boxing"
+        <TextView
+            android:id="@+id/tv_boxing_deptName"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/bg_put"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:text="装箱已核对"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
+            android:text="科室:"
             android:textColor="@color/text_blue"
-            android:textSize="16sp" />
+            android:textSize="15sp" />
 
+        <TextView
+            android:id="@+id/tv_boxing_userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="操作人:"
+            android:textColor="@color/text_blue"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_boxing_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:text="已装:0个"
+            android:textColor="@color/text_blue"
+            android:textSize="15sp" />
     </RelativeLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -70,7 +50,7 @@
             android:layout_weight="1"
             android:background="@color/bg_breast_header"
             android:gravity="center"
-            android:text="床位号"
+            android:text="床号"
             android:textColor="@color/text_white"
             android:textSize="15sp" />
 
@@ -86,7 +66,6 @@
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/tv_select_milk"
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_marginLeft="1dp"
@@ -104,7 +83,7 @@
             android:layout_weight="1"
             android:background="@color/bg_breast_header"
             android:gravity="center"
-            android:text="瓶数"
+            android:text="病区"
             android:textColor="@color/text_white"
             android:textSize="15sp" />
 
@@ -112,24 +91,24 @@
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_marginLeft="1dp"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:background="@color/bg_breast_header"
             android:gravity="center"
-            android:text="状态"
+            android:text="箱号"
             android:textColor="@color/text_white"
             android:textSize="15sp" />
 
     </LinearLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/refresh_advice"
+        android:id="@+id/refresh_person"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView_advice"
+            android:id="@+id/recycler_person"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent" />
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

@@ -64,7 +64,9 @@
                     android:background="@drawable/time_bg2"
                     android:gravity="center"
                     android:text="一病区"
-                    android:textSize="@dimen/txt_mid" />
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/txt_mid"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 

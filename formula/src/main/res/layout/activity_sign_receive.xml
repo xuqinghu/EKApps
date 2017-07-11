@@ -93,11 +93,11 @@
             android:layout_weight="2"
             android:background="@drawable/left_nexttext_bg"
             android:padding="5dp"
-            android:text="标签打印日期："
+            android:text="奶箱规格："
             android:textSize="15sp" />
 
         <TextView
-            android:id="@+id/tv_box_detail_binningDate"
+            android:id="@+id/tv_size"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
@@ -110,7 +110,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
+        android:layout_marginRight="5dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_box_detail_division"
@@ -149,7 +150,7 @@
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/tv_box_detail_deliveryDate"
+            android:id="@+id/tv_division"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
@@ -162,7 +163,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
+        android:layout_marginRight="5dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_box_detail_acceptPerson"
@@ -200,6 +202,7 @@
             android:textSize="15sp" />
 
         <TextView
+            android:id="@+id/tv_count"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
@@ -208,13 +211,131 @@
             android:textSize="15sp" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@drawable/left_nexttext_bg"
+            android:padding="5dp"
+            android:text="装箱人:"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_binning_person"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@drawable/right_nexttext_bg"
+            android:padding="5dp"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@drawable/left_nexttext_bg"
+            android:padding="5dp"
+            android:text="装箱时间:"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_binning_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@drawable/right_nexttext_bg"
+            android:padding="5dp"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@drawable/left_nexttext_bg"
+            android:padding="5dp"
+            android:text="签发人:"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_delivery_person"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@drawable/right_nexttext_bg"
+            android:padding="5dp"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@drawable/left_nexttext_bg"
+            android:padding="5dp"
+            android:text="签发时间:"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_delivery_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:background="@drawable/right_nexttext_bg"
+            android:padding="5dp"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <TextView
+            android:id="@+id/tv_milkName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/left_nexttext_bg"
+            android:padding="5dp"
+            android:text="奶名:"
+            android:textSize="15sp" />
+
+
+    </LinearLayout>
+
     <Button
         android:id="@+id/btn_sure"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="60dp"
         android:background="@drawable/bg_sure"
         android:text="确认"
         android:textColor="@color/text_white"
@@ -225,7 +346,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:text="温馨提示：请仔细核对箱子信息，确定无误后，点击确认"
         android:textColor="@color/text_red" />
 
 </LinearLayout>

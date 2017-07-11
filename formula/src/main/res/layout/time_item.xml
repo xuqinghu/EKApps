@@ -12,6 +12,8 @@
         android:background="@drawable/time_bg1"
         android:gravity="center"
         android:text="11"
-        android:textSize="@dimen/txt_mid" />
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/txt_mid"
+        android:textStyle="bold" />
 
 </LinearLayout>
