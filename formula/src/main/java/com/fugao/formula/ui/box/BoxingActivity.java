@@ -121,11 +121,16 @@ public class BoxingActivity extends BaseActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    //判断是否显示全部核对按钮
+    //判断是否显示全部核对按钮,支持1-3个时间点
     private void showAllSure() {
         time = XmlDB.getInstance(BoxingActivity.this).getKeyString("time", "");
-        if (!StringUtils.StringIsEmpty(time) && !time.contains(";")) {
-            tv_all_sure.setVisibility(View.VISIBLE);
+        if (!StringUtils.StringIsEmpty(time)) {
+            String[] times = time.split(";");
+            if (times.length <= 3) {
+                tv_all_sure.setVisibility(View.VISIBLE);
+            } else {
+                tv_all_sure.setVisibility(View.GONE);
+            }
         } else {
             tv_all_sure.setVisibility(View.GONE);
         }

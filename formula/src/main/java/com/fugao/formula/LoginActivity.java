@@ -1,5 +1,7 @@
 package com.fugao.formula;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +16,7 @@ import com.fugao.formula.entity.NurseBean;
 import com.fugao.formula.ui.MainActivity;
 import com.fugao.formula.utils.DialogUtils;
 import com.fugao.formula.utils.FastJsonUtils;
+import com.fugao.formula.utils.FileHelper;
 import com.fugao.formula.utils.NetWorkUtils;
 import com.fugao.formula.utils.OkHttpUtils;
 import com.fugao.formula.utils.StringUtils;
@@ -225,5 +228,20 @@ public class LoginActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         initSetting();
+    }
+
+    /**
+     * 服务器发现新版本
+     */
+    private void newVersion() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        builder.setTitle("提示！").setMessage("检测到有新版本").setNegativeButton("更新", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+//                UpdateDialgoFragment.newInstance(OkHttpUtils.BASE_URL + nurseAccountBean.AppInfo.Path,
+//                        FileHelper.appSDPath + "/" + nurseAccountBean.AppInfo.Name).show(getFragmentManager(),
+//                        "updateApp");
+            }
+        }).create().show();
     }
 }
