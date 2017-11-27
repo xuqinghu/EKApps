@@ -19,7 +19,8 @@ public class Constant {
     public static String GETMILKNAMES = "getMilkNames";
     public static String TIME_LIST = "time_list";
     public static String MILK_NAME = "milk_name";
+    public static Boolean CANCEL_BOXING=false;
     public static List<AdviceEntity> ADVICE_BOX_LIST = new ArrayList<>();
-    public static boolean CHECK_ALL=false;
-    public static List<MilkBean> SELECT_MILK_NAME=new ArrayList<>();
+    public static List<MilkBean> SELECT_MILK_NAME = new ArrayList<>();
+    public static String SELECT_PLACE="未核对";
 }
