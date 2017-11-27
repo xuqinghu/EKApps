@@ -40,6 +40,17 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tv_box_detail_item_bedNo"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="床号"
+                android:textColor="@color/text_red"
+                android:textSize="15sp" />
+
+            <TextView
                 android:id="@+id/tv_box_detail_item_name"
                 android:layout_width="0dp"
                 android:layout_height="30dp"

@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:key="set_network"
-        android:title="网络配置" />
+        android:title="服务器设置" />
     <EditTextPreference
         android:defaultValue="11"
         android:inputType="textPostalAddress"
@@ -22,5 +22,20 @@
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="端口设置" />
+    <PreferenceCategory android:title="WIFI设置">
+
+        <SwitchPreference
+            android:key="wifi_auto"
+            android:title="自动切换" />
+
+        <EditTextPreference
+            android:inputType="textCapWords"
+            android:key="wifi_ssid"
+            android:maxLines="1"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="WiFi SSID" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

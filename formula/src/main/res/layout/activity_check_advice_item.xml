@@ -109,7 +109,6 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="状态"
                 android:textColor="@color/text_grey"
                 android:textSize="15sp" />
         </LinearLayout>

@@ -43,6 +43,10 @@ public class StringUtils {
         }
     }
 
+    public static boolean equals(String str1, String str2) {
+        return str1 == null ? str2 == null : str1.equals(str2);
+    }
+
     /**
      * 去除字符串中的 换行符，制表符  回车符     ，（不包含 空格）
      *

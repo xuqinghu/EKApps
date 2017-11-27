@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/rl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
@@ -21,7 +22,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="核对人:高晓"
                 android:textSize="15sp" />
 
             <TextView
@@ -30,7 +30,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="2dp"
-                android:text="人数:0"
                 android:textColor="@color/text_green"
                 android:textSize="15sp" />
 
@@ -40,7 +39,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="2dp"
-                android:text="瓶数:0"
                 android:textColor="@color/text_blue"
                 android:textSize="15sp" />
         </LinearLayout>
@@ -59,10 +57,11 @@
 
     </RelativeLayout>
 
-
     <LinearLayout
+        android:id="@+id/ll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl">
 
         <TextView
             android:layout_width="0dp"
@@ -85,17 +84,25 @@
             android:textColor="@color/text_white"
             android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/tv_select_milk"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_marginLeft="1dp"
             android:layout_weight="2"
-            android:background="@color/bg_breast_header"
-            android:gravity="center"
-            android:text="奶名"
-            android:textColor="@color/text_white"
-            android:textSize="15sp" />
+            android:background="@color/bg_breast_header">
+
+            <TextView
+                android:id="@+id/tv_select_milk"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="奶名"
+                android:textColor="@color/text_white"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
 
         <TextView
             android:layout_width="0dp"
@@ -121,15 +128,25 @@
 
     </LinearLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/refresh_advice"
+    <FrameLayout
+        android:id="@+id/fl_change2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ll"
+        android:layout_marginBottom="48dp" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView_advice"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+    <com.flyco.tablayout.CommonTabLayout
+        android:id="@+id/tl1"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:background="#6D8FB0"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        tl:tl_iconVisible="false"
+        tl:tl_indicator_margin_left="5dp"
+        tl:tl_indicator_margin_right="5dp"
+        tl:tl_indicator_style="BLOCK"
+        tl:tl_textsize="14sp" />
 
-</LinearLayout>
+</RelativeLayout>

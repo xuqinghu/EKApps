@@ -176,6 +176,17 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="30dp"
+            android:layout_weight="1"
+            android:background="@color/bg_breast_header"
+            android:gravity="center"
+            android:text="床号"
+            android:textColor="@color/text_white"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="1dp"
             android:layout_weight="1.5"
             android:background="@color/bg_breast_header"
             android:gravity="center"

@@ -17,6 +17,7 @@
     <color name="text_light_grey">#B2B2B2</color>
     <color name="text_yellow">#F8C335</color>
     <color name="text_green">#36B34A</color>
+    <color name="text_pink">#FC7AAB</color>
     <!--线颜色-->
     <color name="divider_line">#DDDCDC</color>
     <color name="bg_alpha_black">#b0000000</color>
