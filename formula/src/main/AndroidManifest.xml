@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fugao.formula">
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 判断是否联网 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -23,28 +25,32 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:windowSoftInputMode="stateHidden"></activity>
-        <activity android:name=".ui.box.BoxingActivity"></activity>
-        <activity android:name=".ui.box.SelectActivity"></activity>
-        <activity android:name=".ui.box.SelectBoxActivity"></activity>
-        <activity android:name=".ui.box.BoxDetailActivity"></activity>
-        <activity android:name=".ui.box.PersonDetailActivity"></activity>
-        <activity android:name=".ui.box.AdviceDetailActivity"></activity>
-        <activity android:name=".ui.MainActivity"></activity>
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".ui.box.BoxingActivity" />
+        <activity android:name=".ui.box.SelectActivity" />
+        <activity android:name=".ui.box.SelectBoxActivity" />
+        <activity android:name=".ui.box.BoxDetailActivity" />
+        <activity android:name=".ui.box.PersonDetailActivity" />
+        <activity android:name=".ui.box.AdviceDetailActivity" />
+        <activity android:name=".ui.MainActivity" />
         <activity
             android:name=".SyncActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/android:Theme.Holo.Light.Dialog"></activity>
+            android:theme="@style/android:Theme.Holo.Light.Dialog" />
         <activity
             android:name=".LoginDialogActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.HalfTranslucent"></activity>
+            android:theme="@style/Theme.HalfTranslucent" />
         <activity
             android:name=".SettingsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/setting_style"></activity>
-        <activity android:name=".ui.signSend.SignSendActivity"></activity>
-        <activity android:name=".ui.signrReceive.SignReceiveActivity"></activity>
+            android:theme="@style/setting_style" />
+        <activity android:name=".ui.signSend.SignSendActivity" />
+        <activity android:name=".ui.signrReceive.SignReceiveActivity1" />
+        <activity android:name=".ui.signrReceive.ReceiveSelectActivity" />
+
+        <service android:name=".wifi.WiFiService" />
+
     </application>
 
 </manifest>
