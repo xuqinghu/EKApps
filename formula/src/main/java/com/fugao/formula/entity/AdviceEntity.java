@@ -32,5 +32,6 @@ public class AdviceEntity implements Serializable {
     public String AdviceStatus;
     public String Quantity;
     public String ShowMsg;
+    public String BoxNo;
     public List<MilkDetail> FormulaMilkDetail;
 }
