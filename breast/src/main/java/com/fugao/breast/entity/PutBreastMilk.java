@@ -17,4 +17,6 @@ public class PutBreastMilk extends BreastMilk implements Serializable {
     public String MilkBoxNo;
     //乳箱状态
     public String MilkBoxState;
+    //0 冷藏        1 冷冻
+    public String MilkBoxOutherState;
 }

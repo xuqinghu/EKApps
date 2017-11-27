@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/item_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/left_text_bg"
+            android:padding="5dp"
+            android:text="姓名：某某某"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/item_patId"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/right_text_bg"
+            android:padding="5dp"
+            android:text="住院号：123456789"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <TextView
+            android:id="@+id/item_bedNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/left_nexttext_bg"
+            android:padding="5dp"
+            android:text="床号：01床"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/item_roomNo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/right_nexttext_bg"
+            android:padding="5dp"
+            android:text="房间号：12345678"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <TextView
+            android:id="@+id/item_division"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/left_nexttext_bg"
+            android:padding="5dp"
+            android:text="病区:一病区"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/item_totalAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/right_nexttext_bg"
+            android:padding="5dp"
+            android:text="有效期：15天"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <TextView
+            android:id="@+id/item_adviceSize"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/left_nexttext_bg"
+            android:padding="5dp"
+            android:text="医嘱剂量:600ml"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/item_adviceFq"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/right_nexttext_bg"
+            android:padding="5dp"
+            android:text="医嘱频次：200ml/6h"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+</LinearLayout>

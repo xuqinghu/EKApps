@@ -21,6 +21,7 @@ import com.fugao.breast.entity.BreastMilk;
 import com.fugao.breast.entity.BreastMilkDetial;
 import com.fugao.breast.entity.Status;
 import com.fugao.breast.entity.ThawListBean;
+import com.fugao.breast.utils.StringUtils;
 import com.fugao.breast.utils.ToastUtils;
 import com.fugao.breast.utils.common.DateUtils;
 import com.fugao.breast.utils.common.FloatUtil;
@@ -38,10 +39,12 @@ import java.util.List;
 
 public class ThawDetail extends BaseActivity {
     private LinearLayout back;
-    private RecyclerView recyclerView;
-    private TextView dose, name, patId, bedNo, roomNo, adviceSize, adviceFq, totalAmount, replenish, flag, division;
-    private ThawDetailAdapter adapter;
+    private RecyclerView recyclerView1, recyclerView2;
+    private TextView dose, replenish, flag;
+    private ThawDetailAdapter adapter1;
+    private PatientAdapter adapter2;
     private BreastMilk breastMilk;
+    private List<BreastMilk> breastMilkList;
     private List<BreastMilkDetial> breastMilkDetials;
     private TwoBtnDialog twoBtnDialog;
     private SingleBtnDialog singleBtnDialog;
@@ -52,6 +55,8 @@ public class ThawDetail extends BaseActivity {
     private String coorDinateID;
     private String milkBoxNo;
     private String remarks;
+    private String twinsCode;
+    private float fyzzl = 0;
 
     @Override
     public void setContentView() {
@@ -61,34 +66,37 @@ public class ThawDetail extends BaseActivity {
     @Override
     public void initView() {
         back = (LinearLayout) findViewById(R.id.ll_breast_detail_back);
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_breast_detail);
+        recyclerView1 = (RecyclerView) findViewById(R.id.recycler_breast_detail);
+        recyclerView2 = (RecyclerView) findViewById(R.id.recycler_breast_patient);
         dose = (TextView) findViewById(R.id.tv_thaw_detail_dose);
-        name = (TextView) findViewById(R.id.tv_thaw_detail_name);
-        patId = (TextView) findViewById(R.id.tv_thaw_detail_patId);
-        bedNo = (TextView) findViewById(R.id.tv_thaw_detail_bedNo);
-        roomNo = (TextView) findViewById(R.id.tv_thaw_detail_roomNo);
-        adviceSize = (TextView) findViewById(R.id.tv_thaw_detail_adviceSize);
-        adviceFq = (TextView) findViewById(R.id.tv_thaw_detail_adviceFq);
-        totalAmount = (TextView) findViewById(R.id.tv_thaw_detail_totalAmount);
         replenish = (TextView) findViewById(R.id.tv_thaw_detail_replenish);
         flag = (TextView) findViewById(R.id.tv_replenish_flag);
-        division = (TextView) findViewById(R.id.tv_thaw_detail_division);
     }
 
     @Override
     public void initData() {
+        breastMilkList = new ArrayList<>();
         singleBtnDialog = new SingleBtnDialog(ThawDetail.this);
         twoBtnDialog = new TwoBtnDialog(ThawDetail.this);
         dataBaseInfo = DataBaseInfo.getInstance(ThawDetail.this);
         breastDetailDao = new BreastDetailDao(dataBaseInfo);
         breastListDao = new BreastListDao(dataBaseInfo);
         breastMilkDetials = new ArrayList<>();
-        breastMilkDetials = breastDetailDao.getBreastMilkDetialByDateAndState(DateUtils.getCurrentDate(), "2", breastMilk.Pid);
+        if (StringUtils.StringIsEmpty(twinsCode)) {
+            breastMilkDetials = breastDetailDao.getBreastMilkDetialByDateAndState(DateUtils.getCurrentDate(), "2", breastMilk.Pid);
+        } else {
+            breastMilkDetials = breastDetailDao.getBreastMilkDetialByDateAndStateAndTwinsCode(DateUtils.getCurrentDate(), "2", twinsCode);
+        }
+        recyclerView2.setNestedScrollingEnabled(false);
+        recyclerView2.setLayoutManager(new LinearLayoutManager(this));
+        adapter2 = new PatientAdapter(R.layout.patient_item, breastMilkList);
+        recyclerView2.setAdapter(adapter2);
         initPatientInfo();
-        recyclerView.addItemDecoration(new RecyclerViewDivider(ThawDetail.this, LinearLayoutManager.HORIZONTAL));
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ThawDetailAdapter(R.layout.breast_detail_item, breastMilkDetials);
-        recyclerView.setAdapter(adapter);
+        recyclerView1.setNestedScrollingEnabled(false);
+        recyclerView1.addItemDecoration(new RecyclerViewDivider(ThawDetail.this, LinearLayoutManager.HORIZONTAL));
+        recyclerView1.setLayoutManager(new LinearLayoutManager(this));
+        adapter1 = new ThawDetailAdapter(R.layout.breast_detail_item, breastMilkDetials);
+        recyclerView1.setAdapter(adapter1);
         //全局设置已解冻奶量
         Constant.THAW_AMOUNT = getThawAmount(DateUtils.getCurrentDate());
         Constant.PUT_AMOUNT = Integer.parseInt(breastMilk.CFAmount);
@@ -104,7 +112,7 @@ public class ThawDetail extends BaseActivity {
                 finish();
             }
         });
-        adapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
+        adapter1.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(BaseQuickAdapter adapter, View view, final int position) {
                 if (breastMilkDetials.get(position).State.equals("3")) {
@@ -153,7 +161,7 @@ public class ThawDetail extends BaseActivity {
                     today = false;
                     breastMilkDetials.clear();
                     breastMilkDetials = getReplenishData();
-                    adapter.setNewData(breastMilkDetials);
+                    adapter1.setNewData(breastMilkDetials);
                     flag.setVisibility(View.VISIBLE);
                     flag.setText("现在是在备今日母乳");
                     replenish.setText("备明日");
@@ -163,7 +171,7 @@ public class ThawDetail extends BaseActivity {
                     today = true;
                     breastMilkDetials.clear();
                     breastMilkDetials = getTodayData();
-                    adapter.setNewData(breastMilkDetials);
+                    adapter1.setNewData(breastMilkDetials);
                     flag.setVisibility(View.GONE);
                     replenish.setText("备今日");
                     Constant.THAW_AMOUNT = getThawAmount(DateUtils.getCurrentDate());
@@ -184,32 +192,48 @@ public class ThawDetail extends BaseActivity {
         bDetail.CFGH = XmlDB.getInstance(ThawDetail.this).getKeyString("nCode", "");
         bDetail.CFDate = DateUtils.getCurrentDate();
         bDetail.ThawGH = "";
-        if (breastDetailDao.getState(bDetail, breastMilk.Pid).equals("1")) {
-            breastDetailDao.updateData(bDetail, "0", breastMilk.Pid);
+        if (breastDetailDao.getState(bDetail).equals("1")) {
+            breastDetailDao.updateData(bDetail, "0");
         } else {
-            breastDetailDao.updateData(bDetail, "1", breastMilk.Pid);
+            breastDetailDao.updateData(bDetail, "1");
         }
         updateList(amount, "refreshData");
     }
 
     //获取补充解冻数据
     private List<BreastMilkDetial> getReplenishData() {
-        return breastDetailDao.getBreastMilkDetialByDateAndState(DateUtils.getBeforeDate(), "2", breastMilk.Pid);
+        List<BreastMilkDetial> mDetails1 = new ArrayList<>();
+        if (StringUtils.StringIsEmpty(twinsCode)) {
+            mDetails1 = breastDetailDao.getBreastMilkDetialByDateAndState(DateUtils.getBeforeDate(), "2", breastMilk.Pid);
+        } else {
+            mDetails1 = breastDetailDao.getBreastMilkDetialByDateAndStateAndTwinsCode(DateUtils.getBeforeDate(), "2", twinsCode);
+        }
+        return mDetails1;
     }
 
     //获取今日解冻数据
     private List<BreastMilkDetial> getTodayData() {
-        return breastDetailDao.getBreastMilkDetialByDateAndState(DateUtils.getCurrentDate(), "2", breastMilk.Pid);
+        List<BreastMilkDetial> milkDetials2 = new ArrayList<>();
+        if (StringUtils.StringIsEmpty(twinsCode)) {
+            milkDetials2 = breastDetailDao.getBreastMilkDetialByDateAndState(DateUtils.getCurrentDate(), "2", breastMilk.Pid);
+        } else {
+            milkDetials2 = breastDetailDao.getBreastMilkDetialByDateAndStateAndTwinsCode(DateUtils.getCurrentDate(), "2", twinsCode);
+        }
+        return milkDetials2;
     }
 
     //获取解冻奶量
     private int getThawAmount(String date) {
         int amount = 0;
-        List<BreastMilkDetial> beans = new ArrayList<>();
-        beans = breastDetailDao.getBreastMilkDetialByDate(date, breastMilk.Pid);
+        List<BreastMilkDetial> mBeans = new ArrayList<>();
+        if (StringUtils.StringIsEmpty(twinsCode)) {
+            mBeans = breastDetailDao.getBreastMilkDetialByDate(date, breastMilk.Pid);
+        } else {
+            mBeans = breastDetailDao.getBreastMilkDetialByDateAndTwinsCode(date, twinsCode);
+        }
         //获取解冻瓶数
-        Constant.THAW_ACCOUNT = beans.size();
-        for (BreastMilkDetial bean : beans) {
+        Constant.THAW_ACCOUNT = mBeans.size();
+        for (BreastMilkDetial bean : mBeans) {
             amount = (int) (amount + Float.parseFloat(bean.Amount));
         }
         return amount;
@@ -217,14 +241,21 @@ public class ThawDetail extends BaseActivity {
 
 
     private void initPatientInfo() {
-        name.setText("姓名:" + breastMilk.Name);
-        patId.setText("住院号:" + breastMilk.Pid);
-        bedNo.setText("床号:" + breastMilk.BedNo);
-        roomNo.setText("房间号:" + breastMilk.RoomNo);
-        division.setText("病区:" + breastMilk.WardName);
-        adviceSize.setText("医嘱剂量:" + FloatUtil.moveZero(breastMilk.YZdosis) + "ml");
-        adviceFq.setText("医嘱频次:" + breastMilk.YZTime);
-        totalAmount.setText("总量:" + breastMilk.YZZL + "ml");
+        breastMilkList.clear();
+        if (StringUtils.StringIsEmpty(twinsCode)) {
+            breastMilkList.add(breastMilk);
+        } else {
+            List<BreastMilk> breastMilks = breastListDao.getBreastListByTwinsCode(twinsCode);
+            if (breastMilks != null && breastMilks.size() > 0) {
+                breastMilkList.addAll(breastMilks);
+                for (BreastMilk bean : breastMilks) {
+                    fyzzl = fyzzl + Float.parseFloat(bean.YZZL);
+                }
+            }
+
+        }
+        adapter2.setNewData(breastMilkList);
+
     }
 
     @Override
@@ -232,6 +263,7 @@ public class ThawDetail extends BaseActivity {
         Intent intent = getIntent();
         breastMilk = new BreastMilk();
         breastMilk = (BreastMilk) intent.getSerializableExtra("thawlist");
+        twinsCode = breastMilk.TwinsCode;
     }
 
     @Override
@@ -291,7 +323,7 @@ public class ThawDetail extends BaseActivity {
 
     //保存解冻数据
     private void saveData(BreastMilkDetial bean, String str_Amount) {
-        breastDetailDao.updateData(bean, "0", breastMilk.Pid);
+        breastDetailDao.updateData(bean, "0");
         updateList(str_Amount, "saveData");
     }
 
@@ -313,17 +345,20 @@ public class ThawDetail extends BaseActivity {
         } else {
             breastMilkDetials = getReplenishData();
         }
-        adapter.setNewData(breastMilkDetials);
+        adapter1.setNewData(breastMilkDetials);
 //        if (isRelease(breastMilkDetials, coorDinateID)) {
 //            showReleaseDialog();
 //        }
         BreastMilk bm = new BreastMilk();
         bm.ThawAccount = Constant.THAW_ACCOUNT + "";
-        bm.ThawAmount = Constant.THAW_AMOUNT + "";
+        bm.ThawAmount = getThawAmount(DateUtils.getCurrentDate()) + "";
         bm.CFAmount = Constant.PUT_AMOUNT + "";
-        if (today) {
+        if (StringUtils.StringIsEmpty(twinsCode)) {
             breastListDao.updateData(bm, breastMilk.Pid);
+        } else {
+            breastListDao.updateDataByTwinsCode(bm, twinsCode);
         }
+
     }
 
     //判断是否释放位置
@@ -373,7 +408,13 @@ public class ThawDetail extends BaseActivity {
 
     //更新已解冻奶量
     private void updateAmountValue() {
-        if (Constant.THAW_AMOUNT >= Float.parseFloat(breastMilk.YZZL) && today) {
+        String yzzl = "";
+        if (StringUtils.StringIsEmpty(twinsCode)) {
+            yzzl = breastMilk.YZZL;
+        } else {
+            yzzl = fyzzl + "";
+        }
+        if (Constant.THAW_AMOUNT >= Float.parseFloat(yzzl) && today) {
             dose.setText(Constant.THAW_AMOUNT + "ml，达到剂量标准！");
         } else {
             dose.setText(Constant.THAW_AMOUNT + "ml");

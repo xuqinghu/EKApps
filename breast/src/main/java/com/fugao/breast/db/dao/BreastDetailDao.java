@@ -43,7 +43,7 @@ public class BreastDetailDao {
         return sqlDB.delete(Constant.BEAST_DETAIL, null, null);
     }
 
-    public void saveToBreastDetail(List<BreastMilkDetial> breastMilkDetials, String pid, String upload) {
+    public void saveToBreastDetail(List<BreastMilkDetial> breastMilkDetials, String pid, String twinsCode, String upload) {
         sqlDB.beginTransaction(); // 手动设置开始事务
         ContentValues contentValues;
         // 数据插入操作循环
@@ -68,6 +68,8 @@ public class BreastDetailDao {
             contentValues.put("MilkBoxState", StringUtils.getString(breastMilkDetial.MilkBoxState));
             contentValues.put("CFDate", StringUtils.getString(breastMilkDetial.CFDate));
             contentValues.put("CFGH", StringUtils.getString(breastMilkDetial.CFGH));
+            contentValues.put("MilkBoxOutherState", StringUtils.getString(breastMilkDetial.MilkBoxOutherState));
+            contentValues.put("TwinsCode", StringUtils.getString(twinsCode));
             contentValues.put("Upload", upload);
             sqlDB.insert(Constant.BEAST_DETAIL, null, contentValues);
         }
@@ -77,7 +79,7 @@ public class BreastDetailDao {
     }
 
     public void saveToPutBreastDetail(List<BreastMilkDetial> breastMilkDetials, String pid, String milkBoxState,
-                                      String upload) {
+                                      String twinsCode, String upload) {
         sqlDB.beginTransaction(); // 手动设置开始事务
         ContentValues contentValues;
         // 数据插入操作循环
@@ -103,6 +105,8 @@ public class BreastDetailDao {
             contentValues.put("MilkBoxState", StringUtils.getString(milkBoxState));
             contentValues.put("CFDate", StringUtils.getString(breastMilkDetial.CFDate));
             contentValues.put("CFGH", StringUtils.getString(breastMilkDetial.CFGH));
+            contentValues.put("MilkBoxOutherState", StringUtils.getString(breastMilkDetial.MilkBoxOutherState));
+            contentValues.put("TwinsCode", twinsCode);
             contentValues.put("Upload", upload);
             sqlDB.insert(Constant.BEAST_DETAIL, null, contentValues);
         }
@@ -111,13 +115,13 @@ public class BreastDetailDao {
         Log.d(TAG, "保存数据到本地数据库 完成");
     }
 
-    public void updateData(BreastMilkDetial breastMilkDetial, String upload, String pid) {
+    public void updateData(BreastMilkDetial breastMilkDetial, String upload) {
         String sql = "update " + Constant.BEAST_DETAIL + " set State='"
                 + breastMilkDetial.State + "',ThawDate='" + breastMilkDetial.ThawDate
                 + "',CFGH='" + breastMilkDetial.CFGH + "',CFDate='" + breastMilkDetial.CFDate
                 + "',ThawTime='" + breastMilkDetial.ThawTime + "',ThawGH='"
                 + breastMilkDetial.ThawGH + "',Upload='" + upload
-                + "' where Pid='" + pid + "' and QRcode='" + breastMilkDetial.QRcode + "'";
+                + "' where QRcode='" + breastMilkDetial.QRcode + "'";
         sqlDB.execSQL(sql);
     }
 
@@ -140,9 +144,9 @@ public class BreastDetailDao {
     }
 
     //获取这条数据的状态，看upload是0还是1
-    public String getState(BreastMilkDetial breastMilkDetial, String pid) {
-        Cursor cursor = sqlDB.query(Constant.BEAST_DETAIL, null, "Pid='" + pid + "' and QRcode='"
-                + breastMilkDetial.QRcode + "'", null, null, null, null);
+    public String getState(BreastMilkDetial breastMilkDetial) {
+        Cursor cursor = sqlDB.query(Constant.BEAST_DETAIL, null, "QRcode='" + breastMilkDetial.QRcode + "'"
+                , null, null, null, null);
         String upload = "";
         while (cursor.moveToNext()) {
             upload = cursor.getString(cursor.getColumnIndex("Upload"));
@@ -193,8 +197,28 @@ public class BreastDetailDao {
         return breastMilkDetials;
     }
 
+    //获取双胞胎今日解冻or补充解冻数据
+    public List<BreastMilkDetial> getBreastMilkDetialByDateAndStateAndTwinsCode(String date, String state, String twinsCode) {
+        List<BreastMilkDetial> breastMilkDetials = new ArrayList<>();
+        breastMilkDetials.addAll(getBreastMilkDetialByStateAndTwinsCode(state, twinsCode));
+        breastMilkDetials.addAll(getBreastMilkDetialByDateAndTwinsCode(date, twinsCode));
+        return breastMilkDetials;
+    }
+
+    //双胞胎
+    public List<BreastMilkDetial> getBreastMilkDetialByStateAndTwinsCode(String state, String twinsCode) {
+        Cursor cursor = sqlDB.query(Constant.BEAST_DETAIL, null, "State='" + state + "' and TwinsCode='" + twinsCode + "'", null, null, null, "MilkPumpDate");
+        return getBreastDetailByCursor(cursor);
+    }
+
+    //双胞胎
+    public List<BreastMilkDetial> getBreastMilkDetialByDateAndTwinsCode(String date, String twinsCode) {
+        Cursor cursor = sqlDB.query(Constant.BEAST_DETAIL, null, "TwinsCode='" + twinsCode + "' and ThawDate='" + date + "'", null, null, null, null);
+        return getBreastDetailByCursor(cursor);
+    }
+
     public List<BreastMilkDetial> getBreastMilkDetialByState(String state, String pid) {
-        Cursor cursor = sqlDB.query(Constant.BEAST_DETAIL, null, "Pid='" + pid + "' and State='" + state + "'", null, null, null, "CoorDinateID");
+        Cursor cursor = sqlDB.query(Constant.BEAST_DETAIL, null, "Pid='" + pid + "' and State='" + state + "'", null, null, null, "MilkPumpDate");
         return getBreastDetailByCursor(cursor);
     }
 
@@ -231,7 +255,19 @@ public class BreastDetailDao {
      * @return
      */
     public List<BreastMilkDetial> getPutDetailByCoorDinateID(String coorDinateID, String state) {
-        Cursor cursor = sqlDB.query(Constant.BEAST_DETAIL, null, "CoorDinateID='" + coorDinateID + "' and State='" + state + "'", null, null, null, null);
+        Cursor cursor = sqlDB.query(Constant.BEAST_DETAIL, null, "CoorDinateID='" + coorDinateID + "' and State='" + state + "'", null, null, null, "MilkPumpDate");
+        return getBreastDetailByCursor(cursor);
+    }
+
+    /**
+     * 根据双胞胎编号获取存放详情
+     *
+     * @param twinsCode
+     * @param state
+     * @return
+     */
+    public List<BreastMilkDetial> getPutDetailByTwinsCode(String twinsCode, String state) {
+        Cursor cursor = sqlDB.query(Constant.BEAST_DETAIL, null, "TwinsCode='" + twinsCode + "' and State='" + state + "'", null, null, null, null);
         return getBreastDetailByCursor(cursor);
     }
 
@@ -328,6 +364,7 @@ public class BreastDetailDao {
             breastMilkDetial.MilkBoxState = cursor.getString(cursor.getColumnIndex("MilkBoxState"));
             breastMilkDetial.CFDate = cursor.getString(cursor.getColumnIndex("CFDate"));
             breastMilkDetial.CFGH = cursor.getString(cursor.getColumnIndex("CFGH"));
+            breastMilkDetial.MilkBoxOutherState = cursor.getString(cursor.getColumnIndex("MilkBoxOutherState"));
             breastMilkDetials.add(breastMilkDetial);
         }
         cursor.close();

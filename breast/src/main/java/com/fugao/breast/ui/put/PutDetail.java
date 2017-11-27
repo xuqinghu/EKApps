@@ -40,7 +40,7 @@ import static android.R.attr.data;
 
 public class PutDetail extends BaseActivity {
     private LinearLayout back;
-    private TextView place, name, pid, bedNo, roomNo, count, amount, transform;
+    private TextView place, name, pid, bedNo, roomNo, count, amount, transform, state;
     private PutDetailAdapter adapter;
     private RecyclerView recyclerView;
     private DataBaseInfo dataBaseInfo;
@@ -55,12 +55,14 @@ public class PutDetail extends BaseActivity {
     private String coorDinateID;
     private boolean isTransform = false;
     private List<PutBreastMilk> putBeans;
+    private String twinsCode;
 
     @Override
     public void setContentView() {
         setContentView(R.layout.activity_put_detail);
         Constant.PUT_AMOUNT = 0;
         Constant.THAW_ACCOUNT = 0;
+//        twinsCode = putBreastMilk.TwinsCode;
     }
 
     @Override
@@ -73,6 +75,7 @@ public class PutDetail extends BaseActivity {
         bedNo = (TextView) findViewById(R.id.tv_put_detail_bedNo);
         roomNo = (TextView) findViewById(R.id.tv_put_detail_roomNo);
         count = (TextView) findViewById(R.id.tv_put_detail_count);
+        state = (TextView) findViewById(R.id.tv_put_detail_state);
         amount = (TextView) findViewById(R.id.tv_put_detail_amount);
         transform = (TextView) findViewById(R.id.tv_put_detail_transform);
         setPatientInfo();
@@ -89,7 +92,14 @@ public class PutDetail extends BaseActivity {
         putBeans = putListDao.getPutList();
         breastRegistDao = new BreastRegistDao(dataBaseInfo);
         breastMilkDetials = new ArrayList<>();
+        //列表分两种情况展示，多胞胎的要展示多个人的奶
+//        if (StringUtils.StringIsEmpty(twinsCode)) {
+//            breastMilkDetials = breastDetailDao.getPutDetailByCoorDinateID(putBreastMilk.CoorDinateID, "2");
+//        } else {
+//            breastMilkDetials = breastDetailDao.getPutDetailByCoorDinateID(twinsCode, "2");
+//        }
         breastMilkDetials = breastDetailDao.getPutDetailByCoorDinateID(putBreastMilk.CoorDinateID, "2");
+
         //存放瓶数
         Constant.PUT_ACCOUNT = (int) Float.parseFloat(putBreastMilk.CFAccount);
         //存放奶量
@@ -139,7 +149,12 @@ public class PutDetail extends BaseActivity {
     }
 
     private void setPatientInfo() {
-        place.setText(putBreastMilk.MilkBoxNo + putBreastMilk.Remarks);
+        if ("0".equals(putBreastMilk.MilkBoxOutherState)) {
+            state.setText("冷藏");
+        } else if ("1".equals(putBreastMilk.MilkBoxOutherState)) {
+            state.setText("冷冻");
+        }
+        place.setText(putBreastMilk.MilkBoxNo + putBreastMilk.Remarks + "(");
         name.setText("姓名:" + putBreastMilk.Name);
         pid.setText("住院号:" + putBreastMilk.Pid);
         bedNo.setText("床位号:" + putBreastMilk.BedNo);

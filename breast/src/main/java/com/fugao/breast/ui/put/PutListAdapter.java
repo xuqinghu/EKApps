@@ -36,5 +36,11 @@ public class PutListAdapter extends BaseQuickAdapter<PutBreastMilk, BaseViewHold
         helper.setText(R.id.tv_put_list_item_name, item.Name);
         helper.setText(R.id.tv_put_list_item_pid, item.Pid);
         helper.setText(R.id.tv_put_list_item_count, item.CFAccount);
+        if ("0".equals(item.MilkBoxOutherState)) {
+            helper.setText(R.id.tv_put_list_item_state, "冷藏");
+        } else if ("1".equals(item.MilkBoxOutherState)) {
+            helper.setText(R.id.tv_put_list_item_state, "冷冻");
+        }
+
     }
 }

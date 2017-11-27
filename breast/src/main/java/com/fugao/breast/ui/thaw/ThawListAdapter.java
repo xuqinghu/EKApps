@@ -29,12 +29,19 @@ public class ThawListAdapter extends BaseQuickAdapter<BreastMilk, BaseViewHolder
         helper.setText(R.id.tv_thaw_item_totalSize, FloatUtil.moveZero(item.YZZL) + "ml");
         helper.setText(R.id.tv_thaw_item_size, FloatUtil.moveZero(item.ThawAmount) + "ml");
         helper.setText(R.id.tv_thaw_item_count, FloatUtil.moveZero(item.CFAmount) + "ml");
-        if ("0".equals(item.YZdosis)) {
+        float amount1 = Float.parseFloat(item.CFAmount);
+        float amount2 = Float.parseFloat(item.YZZL);
+        if ("无".equals(item.IsNoYZ)) {
             helper.setBackgroundColor(R.id.ll_thaw_item_bg, Color.parseColor("#FFFFAA"));
-        } else if (!"0".equals(item.YZdosis) && "0".equals(item.CFAmount)) {
+        } else if (!"无".equals(item.IsNoYZ) && amount1 < amount2) {
             helper.setBackgroundColor(R.id.ll_thaw_item_bg, Color.parseColor("#FFB5B5"));
-        } else {
+        } else if (amount1 >= amount2 && !"无".equals(item.IsNoYZ)) {
             helper.setBackgroundColor(R.id.ll_thaw_item_bg, Color.parseColor("#FFFFFF"));
+        }
+        if ("新医嘱".equals(item.DepartmentName)) {
+            helper.setVisible(R.id.drugs_sign, true);
+        } else {
+            helper.setVisible(R.id.drugs_sign, false);
         }
     }
 }

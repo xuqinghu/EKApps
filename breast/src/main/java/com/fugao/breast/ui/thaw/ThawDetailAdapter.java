@@ -32,8 +32,14 @@ public class ThawDetailAdapter extends BaseQuickAdapter<BreastMilkDetial, BaseVi
             helper.setTextColor(R.id.tv_thaw_detail_item_state, Color.parseColor("#6f6a6a"));
         }
         helper.setText(R.id.tv_thaw_detail_item_size, FloatUtil.moveZero(item.Amount) + "ml");
-        helper.setText(R.id.tv_thaw_detail_item_time, item.MilkPumpDate + " " + item.MilkPumpTime);
+        helper.setText(R.id.tv_thaw_detail_item_time1, item.MilkPumpDate);
+        helper.setText(R.id.tv_thaw_detail_item_time2, item.MilkPumpTime);
         helper.setText(R.id.tv_thaw_detail_item_place1, item.MilkBoxNo);
         helper.setText(R.id.tv_thaw_detail_item_place2, item.Remarks);
+        if ("0".equals(item.MilkBoxOutherState)) {
+            helper.setText(R.id.tv_thaw_detail_item_state1, "冷藏");
+        } else if ("1".equals(item.MilkBoxOutherState)) {
+            helper.setText(R.id.tv_thaw_detail_item_state1, "冷冻");
+        }
     }
 }

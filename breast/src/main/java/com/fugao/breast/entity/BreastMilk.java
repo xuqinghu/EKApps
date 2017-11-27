@@ -43,6 +43,8 @@ public class BreastMilk implements Serializable {
     //存放量
     public String CFAmount;
     public String IsNoYZ;
+    //双保胎/多保胎编号
+    public String TwinsCode;
     //明细
     public List<BreastMilkDetial> BreastMilkItems;
 }

@@ -21,7 +21,7 @@ public class PutDetailAdapter extends BaseQuickAdapter<BreastMilkDetial, BaseVie
     protected void convert(BaseViewHolder helper, BreastMilkDetial item) {
         helper.setText(R.id.tv_put_detail_item_date, item.MilkPumpDate + " " + item.MilkPumpTime);
         helper.setText(R.id.tv_put_detail_item_amount, FloatUtil.moveZero(item.Amount) + "ml");
-        helper.setText(R.id.tv_put_detail_item_validDate, item.YXQ + "天");
+        helper.setText(R.id.tv_put_detail_item_validDate, item.YXQ);
 
     }
 }

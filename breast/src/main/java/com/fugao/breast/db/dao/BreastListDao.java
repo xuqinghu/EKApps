@@ -10,6 +10,7 @@ import com.fugao.breast.db.DataBaseInfo;
 import com.fugao.breast.entity.BreastMilk;
 import com.fugao.breast.entity.BreastMilkDetial;
 import com.fugao.breast.utils.StringUtils;
+import com.fugao.breast.utils.common.FloatUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,13 +66,14 @@ public class BreastListDao {
             contentValues.put("YZdosis", StringUtils.getString(breastMilk.YZdosis));
             contentValues.put("ThawAmount", StringUtils.getString(breastMilk.ThawAmount));
             contentValues.put("ThawAccount", StringUtils.getString(breastMilk.ThawAccount));
-            contentValues.put("YZZL", StringUtils.getString(breastMilk.YZZL));
+            contentValues.put("YZZL", Integer.parseInt(FloatUtil.moveZero(StringUtils.getString(breastMilk.YZZL))));
             contentValues.put("RoomNo", StringUtils.getString(breastMilk.RoomNo));
-            contentValues.put("CFAmount", StringUtils.getString(breastMilk.CFAmount));
+            contentValues.put("CFAmount", Integer.parseInt(FloatUtil.moveZero(StringUtils.getString(breastMilk.CFAmount))));
             contentValues.put("CFAccount", StringUtils.getString(breastMilk.CFAccount));
             contentValues.put("IsNoYZ", StringUtils.getString(breastMilk.IsNoYZ));
+            contentValues.put("TwinsCode", StringUtils.getString(breastMilk.TwinsCode));
             if (breastMilk.BreastMilkItems != null && breastMilk.BreastMilkItems.size() > 0) {
-                breastDetailDao.saveToBreastDetail(breastMilk.BreastMilkItems, breastMilk.Pid, "1");
+                breastDetailDao.saveToBreastDetail(breastMilk.BreastMilkItems, breastMilk.Pid, breastMilk.TwinsCode, "1");
             }
             sqlDB.insert(Constant.BREAST_LIST, null, contentValues);
         }
@@ -84,6 +86,14 @@ public class BreastListDao {
         String sql = "update " + Constant.BREAST_LIST + " set ThawAccount='"
                 + breastMilk.ThawAccount + "',ThawAmount='" + breastMilk.ThawAmount
                 + "' ,CFAmount='" + breastMilk.CFAmount + "' where Pid='" + pid + "'";
+        sqlDB.execSQL(sql);
+    }
+
+    //通过双胞胎标记来修改数据
+    public void updateDataByTwinsCode(BreastMilk breastMilk, String twinsCode) {
+        String sql = "update " + Constant.BREAST_LIST + " set ThawAccount='"
+                + breastMilk.ThawAccount + "',ThawAmount='" + breastMilk.ThawAmount
+                + "' ,CFAmount='" + breastMilk.CFAmount + "' where TwinsCode='" + twinsCode + "'";
         sqlDB.execSQL(sql);
     }
 
@@ -101,14 +111,26 @@ public class BreastListDao {
         return breastMilks;
     }
 
+    public List<BreastMilk> getBreastListByTwinsCode(String twinsCode) {
+        Cursor cursor = sqlDB.query(Constant.BREAST_LIST, null, "TwinsCode='" + twinsCode + "'",
+                null, null, null, null);
+        return getBreastListByCursor(cursor);
+    }
+
     public List<BreastMilk> getBreastListByIsNoYZAndCFAmount() {
-        Cursor cursor = sqlDB.query(Constant.BREAST_LIST, null, "IsNoYZ='有' and CFAmount>'0'",
+        Cursor cursor = sqlDB.query(Constant.BREAST_LIST, null, "IsNoYZ='有' and CFAmount>=YZZL",
                 null, null, null, null);
         return getBreastListByCursor(cursor);
     }
 
     public List<BreastMilk> getBreastListByIsNoYZAndCFAmount1() {
-        Cursor cursor = sqlDB.query(Constant.BREAST_LIST, null, "IsNoYZ='有' and CFAmount='0'",
+        Cursor cursor = sqlDB.query(Constant.BREAST_LIST, null, "IsNoYZ='有' and CFAmount<YZZL",
+                null, null, null, null);
+        return getBreastListByCursor(cursor);
+    }
+
+    public List<BreastMilk> getBreastListByTHAWAmount() {
+        Cursor cursor = sqlDB.query(Constant.BREAST_LIST, null, "ThawAmount>'0'",
                 null, null, null, null);
         return getBreastListByCursor(cursor);
     }
@@ -141,6 +163,7 @@ public class BreastListDao {
             breastMilk.CFAccount = cursor.getString(cursor.getColumnIndex("CFAccount"));
             breastMilk.CFAmount = cursor.getString(cursor.getColumnIndex("CFAmount"));
             breastMilk.IsNoYZ = cursor.getString(cursor.getColumnIndex("IsNoYZ"));
+            breastMilk.TwinsCode = cursor.getString(cursor.getColumnIndex("TwinsCode"));
             breastMilks.add(breastMilk);
         }
         cursor.close();

@@ -303,17 +303,24 @@ public class PutList extends BaseActivity {
                 flag1 = true;
                 if (flag1 && flag2) {
                     DialogUtils.dissmissProgressDialog();
-                    recyclerView.setVisibility(View.VISIBLE);
                     tv_date.setText(DateUtils.getCurrentDate());
                     tv_time.setText(DateUtils.getCurrentTime1());
                 }
-                if (response != null) {
-                    data = FastJsonUtils.getBeanList(response, PutBreastMilk.class);
-                    putListDao.deleteAllInfo();
-                    putListDao.saveToPutList(data);
-                    adapter.setNewData(data);
-                    setCount(data);
+                if (code == 200) {
+                    if ("[]".equals(response)) {
+                        ToastUtils.showShort(PutList.this, "没有数据");
+                    } else {
+                        recyclerView.setVisibility(View.VISIBLE);
+                        data = FastJsonUtils.getBeanList(response, PutBreastMilk.class);
+                        putListDao.deleteAllInfo();
+                        putListDao.saveToPutList(data);
+                        adapter.setNewData(data);
+                        setCount(data);
+                    }
+                } else {
+                    ToastUtils.showShort(PutList.this, "服务器异常");
                 }
+
             }
 
             @Override
@@ -358,16 +365,24 @@ public class PutList extends BaseActivity {
                     tv_date.setText(DateUtils.getCurrentDate());
                     tv_time.setText(DateUtils.getCurrentTime1());
                 }
-                if (response != null) {
-                    List<PutBreastMilk> beans = new ArrayList<>();
-                    beans = FastJsonUtils.getBeanList(response, PutBreastMilk.class);
-                    breastRegistDao.deleteAllInfo();
-                    //将state=1的数据存在本地，为了后面扫描奶瓶时查询病人信息
-                    for (PutBreastMilk putBreastMilk : beans) {
-                        if (putBreastMilk.BreastMilkItems != null && putBreastMilk.BreastMilkItems.size() > 0) {
-                            breastRegistDao.saveToBreastRegist(putBreastMilk.BreastMilkItems, putBreastMilk.Name, putBreastMilk.BedNo, putBreastMilk.RoomNo);
+                if (code == 200) {
+                    if ("[]".equals(response)) {
+
+                    } else {
+                        List<PutBreastMilk> beans = new ArrayList<>();
+                        beans = FastJsonUtils.getBeanList(response, PutBreastMilk.class);
+                        breastRegistDao.deleteAllInfo();
+                        //将state=1的数据存在本地，为了后面扫描奶瓶时查询病人信息
+                        for (PutBreastMilk putBreastMilk : beans) {
+                            if (putBreastMilk.BreastMilkItems != null && putBreastMilk.BreastMilkItems.size() > 0) {
+                                breastRegistDao.saveToBreastRegist(putBreastMilk.BreastMilkItems, putBreastMilk.Name,
+                                        putBreastMilk.BedNo, putBreastMilk.RoomNo);
+                            }
                         }
                     }
+
+                } else {
+                    ToastUtils.showShort(PutList.this, "服务器异常");
                 }
             }
 

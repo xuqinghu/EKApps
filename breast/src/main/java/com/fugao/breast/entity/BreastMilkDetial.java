@@ -22,7 +22,7 @@ public class BreastMilkDetial implements Serializable {
     //备注
     public String Remarks;
     //状态
-    public String State;
+    public String  State;
     //汇总ID
     public String SummaryId;
     //打印状态
@@ -47,4 +47,5 @@ public class BreastMilkDetial implements Serializable {
     public String CFGH;
     //存放日期
     public String CFDate;
+    public String MilkBoxOutherState;
 }

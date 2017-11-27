@@ -11,7 +11,9 @@
         <activity android:name=".ui.thaw.ThawList"></activity>
         <activity android:name=".ui.thaw.ThawDetail"></activity>
         <activity android:name=".ui.thaw.SearchActivity"></activity>
-        <activity android:name=".ui.BreastActivity"></activity>
+        <activity
+            android:name=".ui.BreastActivity"
+            android:exported="true"></activity>
 
     </application>
 

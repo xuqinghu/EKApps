@@ -14,7 +14,7 @@ import com.fugao.breast.constant.Constant;
 public class DataBaseInfo {
     private String DB_NAME = "breast.db";
 
-    private int DB_VERSION = 30;
+    private int DB_VERSION = 31;
 
     private SQLiteDatabase sqlDB;
     public static DataBaseInfo dataBaseInfoCurrent;
@@ -93,24 +93,24 @@ public class DataBaseInfo {
         @Override
         public void onCreate(SQLiteDatabase db) {
             String breastList_Sql = "CREATE TABLE " + Constant.BREAST_LIST
-                    + " (Id varchar(30)," + "Name varchar(100),"
+                    + " (Id varchar(30)," + "Name varchar(50),"
                     + "Sex varchar(50)," + "Pid varchar(50)," + "BedNo varchar(50),"
                     + "DepartmentId varchar(50)," + "WardId varchar(50),"
-                    + "DepartmentName varchar(100)," + "WardName varchar(100),"
-                    + "YZTime varchar(100)," + "YZdosis varchar(100),"
+                    + "DepartmentName varchar(100)," + "WardName varchar(50),"
+                    + "YZTime varchar(50)," + "YZdosis varchar(50)," + "TwinsCode varchar(50),"
                     + "ThawAmount  varchar(50)," + "ThawAccount varchar(50),"
-                    + "CFAccount  varchar(50)," + "CFAmount varchar(50)," + "IsNoYZ varchar(50),"
-                    + "YZZL varchar(50)," + "RoomNo varchar(50))";
+                    + "CFAccount  varchar(50)," + "CFAmount int," + "IsNoYZ varchar(50),"
+                    + "YZZL int," + "RoomNo varchar(50))";
             db.execSQL(breastList_Sql);
             String breastDetail_Sql = "CREATE TABLE " + Constant.BEAST_DETAIL
-                    + " (Pid varchar(50)," + "Amount varchar(30)," + "MilkBoxId varchar(100),"
+                    + " (Pid varchar(50)," + "Amount varchar(30)," + "MilkBoxId varchar(50),"
                     + "MilkBoxNo varchar(50)," + "CoorDinateID varchar(50)," + "CoorDinate varchar(50),"
                     + "Remarks varchar(50)," + "State varchar(50),"
-                    + "SummaryId varchar(100)," + "PrintState varchar(100),"
-                    + "ThawDate varchar(100)," + "ThawTime varchar(100),"
-                    + "ThawGH varchar(100)," + "MilkPumpDate varchar(100),"
-                    + "MilkPumpTime varchar(100)," + "QRcode varchar(100),"
-                    + "CFGH varchar(50)," + "CFDate varchar(50),"
+                    + "SummaryId varchar(50)," + "PrintState varchar(50),"
+                    + "ThawDate varchar(50)," + "ThawTime varchar(50),"
+                    + "ThawGH varchar(50)," + "MilkPumpDate varchar(50),"
+                    + "MilkPumpTime varchar(100)," + "QRcode varchar(50)," + "TwinsCode varchar(50),"
+                    + "CFGH varchar(50)," + "CFDate varchar(50)," + "MilkBoxOutherState varchar(50),"
                     + "YXQ varchar(50)," + "MilkBoxState varchar(50)," + "Upload varchar(50))";
             db.execSQL(breastDetail_Sql);
             String putList_Sql = "CREATE TABLE " + Constant.PUT_LIST
@@ -122,7 +122,7 @@ public class DataBaseInfo {
                     + "ThawAmount  varchar(50)," + "ThawAccount varchar(50),"
                     + "CFAccount varchar(50)," + "CFAmount varchar(50),"
                     + "CoorDinateID  varchar(50)," + "RoomNo varchar(50),"
-                    + "CoorDinate  varchar(50)," + "Remarks varchar(50),"
+                    + "CoorDinate  varchar(50)," + "Remarks varchar(50)," + "MilkBoxOutherState varchar(50),"
                     + "MilkBoxId  varchar(50)," + "MilkBoxNo varchar(50)," + "MilkBoxState varchar(50),"
                     + "YZZL varchar(50))";
             db.execSQL(putList_Sql);

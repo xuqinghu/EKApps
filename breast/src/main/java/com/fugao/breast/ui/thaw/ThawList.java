@@ -19,6 +19,7 @@ import com.fugao.breast.db.dao.BreastListDao;
 import com.fugao.breast.entity.BreastMilk;
 import com.fugao.breast.entity.BreastMilkDetial;
 import com.fugao.breast.ui.put.PutList;
+import com.fugao.breast.utils.StringUtils;
 import com.fugao.breast.utils.ToastUtils;
 import com.fugao.breast.utils.common.DateUtils;
 import com.fugao.breast.utils.common.DialogUtils;
@@ -122,12 +123,14 @@ public class ThawList extends BaseActivity {
     }
 
     //设置已解冻瓶数
-    private void thawCount(List<BreastMilk> beans) {
-        int c = 0;
-        for (BreastMilk bean : beans) {
-            c = c + Integer.parseInt(bean.ThawAccount);
+    private void thawCount() {
+        List<BreastMilk> beans = breastListDao.getBreastListByTHAWAmount();
+        if (beans != null && beans.size() > 0) {
+            count.setText("已备：" + beans.size() + "人");
+        } else {
+            count.setText("已备：0人");
         }
-        count.setText("已备：" + c);
+
     }
 
 
@@ -196,19 +199,24 @@ public class ThawList extends BaseActivity {
             @Override
             public void onSuccess(String response, int code) {
                 DialogUtils.dissmissProgressDialog();
-                recyclerView.setVisibility(View.VISIBLE);
-                if (response != null) {
-                    tv_date.setText(DateUtils.getCurrentDate());
-                    tv_time.setText(DateUtils.getCurrentTime1());
-                    data = FastJsonUtils.getBeanList(response, BreastMilk.class);
-                    breastListDao.deleteAllInfo();
-                    breastListDao.saveToBreastList(data);
-                    data.clear();
-                    data = breastListDao.getBreastList();
-                    adapter.setNewData(data);
-                    thawCount(data);
+                if (code == 200) {
+                    if ("[]".equals(response)) {
+                        ToastUtils.showShort(ThawList.this, "没有数据");
+                    } else {
+                        recyclerView.setVisibility(View.VISIBLE);
+                        tv_date.setText(DateUtils.getCurrentDate());
+                        tv_time.setText(DateUtils.getCurrentTime1());
+                        data = FastJsonUtils.getBeanList(response, BreastMilk.class);
+                        breastListDao.deleteAllInfo();
+                        breastListDao.saveToBreastList(data);
+                        data.clear();
+                        data = breastListDao.getBreastList();
+                        adapter.setNewData(data);
+                        thawCount();
+                    }
+                } else {
+                    ToastUtils.showShort(ThawList.this, "服务器异常");
                 }
-
             }
 
             @Override
@@ -240,7 +248,7 @@ public class ThawList extends BaseActivity {
         data.clear();
         data = breastListDao.getBreastList();
         adapter.setNewData(data);
-        thawCount(data);
+        thawCount();
     }
 
     @Override

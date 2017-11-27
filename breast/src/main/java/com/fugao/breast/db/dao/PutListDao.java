@@ -86,9 +86,10 @@ public class PutListDao {
             contentValues.put("CFAccount", StringUtils.getString(putBreastMilk.CFAccount));
             contentValues.put("CFAmount", StringUtils.getString(putBreastMilk.CFAmount));
             contentValues.put("MilkBoxState", StringUtils.getString(putBreastMilk.MilkBoxState));
+            contentValues.put("MilkBoxOutherState", StringUtils.getString(putBreastMilk.MilkBoxOutherState));
             if (putBreastMilk.BreastMilkItems != null && putBreastMilk.BreastMilkItems.size() > 0) {
-                breastDetailDao.saveToPutBreastDetail(putBreastMilk.BreastMilkItems, putBreastMilk.Pid, putBreastMilk.MilkBoxState,
-                        "1");
+                breastDetailDao.saveToPutBreastDetail(putBreastMilk.BreastMilkItems, putBreastMilk.Pid,
+                        putBreastMilk.MilkBoxState,putBreastMilk.TwinsCode,"1");
             }
             sqlDB.insert(Constant.PUT_LIST, null, contentValues);
         }
@@ -153,6 +154,7 @@ public class PutListDao {
             putBreastMilk.CFAccount = cursor.getString(cursor.getColumnIndex("CFAccount"));
             putBreastMilk.CFAmount = cursor.getString(cursor.getColumnIndex("CFAmount"));
             putBreastMilk.MilkBoxState = cursor.getString(cursor.getColumnIndex("MilkBoxState"));
+            putBreastMilk.MilkBoxOutherState = cursor.getString(cursor.getColumnIndex("MilkBoxOutherState"));
             putBreastMilks.add(putBreastMilk);
         }
         cursor.close();

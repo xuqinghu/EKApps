@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
 
     <RelativeLayout
+        android:id="@+id/rl"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/bg_breast_header">
@@ -43,216 +44,112 @@
             android:textSize="@dimen/txt_mid" />
     </RelativeLayout>
 
-    <TextView
-        android:id="@+id/tv_replenish_flag"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="现在是在备今日母乳"
-        android:textColor="@color/text_red"
-        android:textSize="@dimen/txt_max"
-        android:visibility="gone" />
-
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl"
+        android:layout_marginBottom="65dp">
 
-        <TextView
-            android:id="@+id/tv_thaw_detail_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/left_text_bg"
-            android:padding="5dp"
-            android:text="姓名：某某某"
-            android:textSize="15sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_thaw_detail_patId"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/right_text_bg"
-            android:padding="5dp"
-            android:text="住院号：123456789"
-            android:textSize="15sp" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/tv_replenish_flag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="现在是在备今日母乳"
+                android:textColor="@color/text_red"
+                android:textSize="@dimen/txt_max"
+                android:visibility="gone" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_breast_patient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 
-        <TextView
-            android:id="@+id/tv_thaw_detail_bedNo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/left_nexttext_bg"
-            android:padding="5dp"
-            android:text="床号：01床"
-            android:textSize="15sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp">
 
-        <TextView
-            android:id="@+id/tv_thaw_detail_roomNo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/right_nexttext_bg"
-            android:padding="5dp"
-            android:text="房间号：12345678"
-            android:textSize="15sp" />
-    </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1.5"
+                    android:background="@color/bg_breast_header"
+                    android:gravity="center"
+                    android:text="泵乳时间"
+                    android:textColor="@color/text_white"
+                    android:textSize="@dimen/txt_mid" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_weight="0.8"
+                    android:background="@color/bg_breast_header"
+                    android:gravity="center"
+                    android:text="奶量"
+                    android:textColor="@color/text_white"
+                    android:textSize="@dimen/txt_mid" />
 
-        <TextView
-            android:id="@+id/tv_thaw_detail_division"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/left_nexttext_bg"
-            android:padding="5dp"
-            android:text="病区:一病区"
-            android:textSize="15sp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_weight="1.5"
+                    android:background="@color/bg_breast_header"
+                    android:gravity="center"
+                    android:text="存放位置"
+                    android:textColor="@color/text_white"
+                    android:textSize="@dimen/txt_mid" />
 
-        <TextView
-            android:id="@+id/tv_thaw_detail_totalAmount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/right_nexttext_bg"
-            android:padding="5dp"
-            android:text="有效期：15天"
-            android:textSize="15sp" />
-    </LinearLayout>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_weight="0.8"
+                    android:background="@color/bg_breast_header"
+                    android:gravity="center"
+                    android:text="状态"
+                    android:textColor="@color/text_white"
+                    android:textSize="@dimen/txt_mid" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_marginLeft="1dp"
+                    android:layout_weight="0.8"
+                    android:background="@color/bg_breast_header"
+                    android:gravity="center"
+                    android:text="状态"
+                    android:textColor="@color/text_white"
+                    android:textSize="@dimen/txt_mid" />
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_thaw_detail_adviceSize"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/left_nexttext_bg"
-            android:padding="5dp"
-            android:text="医嘱剂量:600ml"
-            android:textSize="15sp" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_breast_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_thaw_detail_adviceFq"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/right_nexttext_bg"
-            android:padding="5dp"
-            android:text="医嘱频次：200ml/6h"
-            android:textSize="15sp" />
-    </LinearLayout>
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:visibility="gone">
+    </android.support.v4.widget.NestedScrollView>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/left_nexttext_bg"
-            android:padding="5dp"
-            android:text="医嘱频次：200ml/6h"
-            android:textSize="15sp" />
-
-        <TextView
-            android:id="@+id/tv_thaw_detail_endTime"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/right_nexttext_bg"
-            android:padding="5dp"
-            android:text="执行时间:2017-05-05"
-            android:textSize="15sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_weight="1.5"
-            android:background="@color/bg_breast_header"
-            android:gravity="center"
-            android:text="泵乳时间"
-            android:textColor="@color/text_white"
-            android:textSize="@dimen/txt_mid" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="1dp"
-            android:layout_weight="0.8"
-            android:background="@color/bg_breast_header"
-            android:gravity="center"
-            android:text="奶量"
-            android:textColor="@color/text_white"
-            android:textSize="@dimen/txt_mid" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="1dp"
-            android:layout_weight="1.5"
-            android:background="@color/bg_breast_header"
-            android:gravity="center"
-            android:text="存放位置"
-            android:textColor="@color/text_white"
-            android:textSize="@dimen/txt_mid" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="1dp"
-            android:layout_weight="0.8"
-            android:background="@color/bg_breast_header"
-            android:gravity="center"
-            android:text="状态"
-            android:textColor="@color/text_white"
-            android:textSize="@dimen/txt_mid" />
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_breast_detail"
-        android:layout_width="match_parent"
-        android:layout_height="250dp">
-
-    </android.support.v7.widget.RecyclerView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"
         android:background="@drawable/show_bg"
         android:gravity="center">
 
@@ -273,4 +170,4 @@
     </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

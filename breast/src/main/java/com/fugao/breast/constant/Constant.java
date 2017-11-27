@@ -14,6 +14,10 @@ public class Constant {
      * 联新pda广播
      */
     public static String LACH_SIS = "lachesis_barcode_value_notice_broadcast";
+    /**
+     * honeywell扫描头的结果
+     */
+    public static String RECEIVER_SCAN_RESULT_HONEYWELL = "com.honeywell.tools.action.scan_result";
 
     /**
      * 本地数据库名称
