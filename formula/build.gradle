@@ -45,4 +45,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.16'
     compile 'com.daimajia.androidanimations:library:1.1.2@aar'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile files('libs/afinal_0.5_bin.jar')
 }
