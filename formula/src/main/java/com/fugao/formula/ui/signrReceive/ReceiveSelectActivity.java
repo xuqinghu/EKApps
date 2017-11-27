@@ -1,8 +1,7 @@
-package com.fugao.formula.ui.box;
+package com.fugao.formula.ui.signrReceive;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -15,12 +14,10 @@ import com.fugao.formula.base.BaseActivity;
 import com.fugao.formula.constant.Constant;
 import com.fugao.formula.db.DataBaseInfo;
 import com.fugao.formula.db.dao.TimeListDao;
-import com.fugao.formula.entity.DivisionEntity;
-import com.fugao.formula.entity.MilkBean;
 import com.fugao.formula.entity.TimeEntity;
 import com.fugao.formula.entity.WardBean;
-import com.fugao.formula.utils.FastJsonUtils;
-import com.fugao.formula.utils.FileHelper;
+import com.fugao.formula.ui.box.DivisionAdapter;
+import com.fugao.formula.ui.box.TimeAdapter;
 import com.fugao.formula.utils.StringUtils;
 import com.fugao.formula.utils.XmlDB;
 import com.fugao.formula.utils.dialog.ListDialog;
@@ -30,26 +27,23 @@ import java.util.List;
 
 import butterknife.BindView;
 
-/**
- * 条件选择
- * Created by Administrator on 2017/6/23 0023.
- */
-
-public class SelectActivity extends BaseActivity {
+public class ReceiveSelectActivity extends BaseActivity {
     @BindView(R.id.ll_back)
     LinearLayout back;
+    @BindView(R.id.tv_receive_division)
+    TextView tv_receive_division;
     @BindView(R.id.recycler)
     RecyclerView recycler;
-    @BindView(R.id.tv_select_division)
-    TextView division;
-    @BindView(R.id.btn_sure)
-    Button btn_sure;
+    @BindView(R.id.btn_receive_sure)
+    Button btn_receive_sure;
     private DataBaseInfo dataBaseInfo;
     private TimeListDao timeListDao;
-    private TimeAdapter adapter2;
     private List<TimeEntity> mTimes;
+    private String[] times = {"00", "01", "02", "03", "04", "05", "06", "07", "08",
+            "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"};
     private ListDialog listDialog;
     private DivisionAdapter adapter1;
+    private TimeAdapter adapter2;
     private FormulaApplication application;
     private List<WardBean> mList;
     private String divisionName = "";
@@ -57,23 +51,23 @@ public class SelectActivity extends BaseActivity {
 
     @Override
     public void setContentView() {
-        setContentView(R.layout.activity_select);
+        setContentView(R.layout.activity_receive_select);
     }
 
     @Override
     public void initView() {
-        division.setText(XmlDB.getInstance(SelectActivity.this).getKeyStringValue("divisionName", ""));
+        tv_receive_division.setText(XmlDB.getInstance(ReceiveSelectActivity.this).getKeyStringValue("name", ""));
     }
 
     @Override
     public void initData() {
         application = (FormulaApplication) getApplication();
         mList = application.getDivisionList();
-        listDialog = new ListDialog(SelectActivity.this);
+        listDialog = new ListDialog(ReceiveSelectActivity.this);
         mTimes = new ArrayList<>();
-        dataBaseInfo = DataBaseInfo.getInstance(SelectActivity.this);
+        dataBaseInfo = DataBaseInfo.getInstance(ReceiveSelectActivity.this);
         timeListDao = new TimeListDao(dataBaseInfo);
-        adapter1 = new DivisionAdapter(R.layout.division_list_item, SelectActivity.this);
+        adapter1 = new DivisionAdapter(R.layout.division_list_item, ReceiveSelectActivity.this);
         recycler.setLayoutManager(new GridLayoutManager(this, 5));
         adapter2 = new TimeAdapter(R.layout.time_item, mTimes);
         recycler.setAdapter(adapter2);
@@ -88,7 +82,7 @@ public class SelectActivity extends BaseActivity {
         listDialog.setDataReturnListener(new ListDialog.RequestReturnListener<WardBean>() {
             @Override
             public void returnResult(WardBean result) {
-                division.setText(result.BQMC);
+                tv_receive_division.setText(result.BQMC);
                 divisionName = result.BQMC;
                 divisionCode = result.BQDM;
             }
@@ -96,45 +90,45 @@ public class SelectActivity extends BaseActivity {
         listDialog.show();
     }
 
-
-    private void getSelectTimeByDb() {
+    private void getSelectTime() {
         mTimes.clear();
         mTimes = timeListDao.getTimeList();
     }
 
     private void setData() {
-        getSelectTimeByDb();
+        getSelectTime();
         adapter2.setNewData(mTimes);
     }
 
     @Override
     public void initListener() {
-        btn_sure.setOnClickListener(new View.OnClickListener() {
+        btn_receive_sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 timeListDao.updateData(mTimes);
-                String time = "";
                 List<TimeEntity> timeList = timeListDao.getTimeListByState("1");
                 if (timeList != null && timeList.size() > 0) {
+                    String time = "";
                     for (TimeEntity bean : timeList) {
                         time = time + bean.Name + ";";
                     }
                     time = time.substring(0, time.length() - 1);
-                    XmlDB.getInstance(SelectActivity.this).saveKey("time", time);
+                    XmlDB.getInstance(ReceiveSelectActivity.this).saveKey("receiveTime", time);
                 } else {
-                    XmlDB.getInstance(SelectActivity.this).saveKey("time", "");
+                    XmlDB.getInstance(ReceiveSelectActivity.this).saveKey("receiveTime", "");
                 }
                 if (!StringUtils.StringIsEmpty(divisionName)) {
-                    XmlDB.getInstance(SelectActivity.this).saveKey("divisionName", divisionName);
-                    XmlDB.getInstance(SelectActivity.this).saveKey("divisionCode", divisionCode);
-                    XmlDB.getInstance(SelectActivity.this).saveKey("milkCode", "");
+                    XmlDB.getInstance(ReceiveSelectActivity.this).saveKey("name", divisionName);
+                    XmlDB.getInstance(ReceiveSelectActivity.this).saveKey("code", divisionCode);
+                    //切换病区时需要清空奶名数据，因为每个病区的奶名是不一样的
+                    XmlDB.getInstance(ReceiveSelectActivity.this).saveKey("milk", "");
                     Constant.SELECT_MILK_NAME.clear();
                 }
-                setResult(502);
+                setResult(504);
                 finish();
             }
         });
-        division.setOnClickListener(new View.OnClickListener() {
+        tv_receive_division.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectDivision();

@@ -61,7 +61,6 @@ public class SelectBoxActivity extends BaseActivity {
     private SingleBtnDialog singleBtnDialog;
     private TwoBtnDialog twoBtnDialog;
     private int count = 0;
-    private int checkCount = 0;
     private int selectCount = 0;
     private List<AdviceEntity> selectList;
 

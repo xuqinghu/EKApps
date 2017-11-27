@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.fugao.formula.R;
 import com.fugao.formula.base.BaseFragment;
+import com.fugao.formula.constant.Constant;
 import com.fugao.formula.constant.FormulaApi;
 import com.fugao.formula.entity.AdviceEntity;
 import com.fugao.formula.entity.BoxListEntity;
@@ -85,7 +86,7 @@ public class BoxingFragment extends BaseFragment {
                 Intent intent = new Intent();
                 intent.setClass(fatherActivity, BoxDetailActivity.class);
                 intent.putExtra("boxlist", mList.get(i));
-                startActivity(intent);
+                startActivityForResult(intent, 101);
             }
         });
         //下拉刷新数据
@@ -138,6 +139,8 @@ public class BoxingFragment extends BaseFragment {
                         if ("[]".equals(response)) {
                             count.setText("已装:0个");
                             ToastUtils.showShort(fatherActivity, "没有数据");
+                            mList.clear();
+                            adapter.setNewData(mList);
                         } else {
                             mList = FastJsonUtils.getBeanList(response, BoxListEntity.class);
                             recyclerView.setVisibility(View.VISIBLE);
@@ -186,5 +189,19 @@ public class BoxingFragment extends BaseFragment {
             }
         };
         OkHttpUtils.get(url, callback);
+    }
+
+    //取消装箱后刷新数据
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case 102:
+                refreshData();
+                Constant.CANCEL_BOXING = false;
+                break;
+            default:
+                break;
+        }
     }
 }

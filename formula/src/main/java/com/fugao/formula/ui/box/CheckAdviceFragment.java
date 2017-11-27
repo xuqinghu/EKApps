@@ -397,6 +397,8 @@ public class CheckAdviceFragment extends BaseFragment {
             checkNetWork();
         }
         XmlDB.getInstance(fatherActivity).saveKey("boxing", "no");
+        milks.clear();
+        milks = milkNameDao.getMilkNameByWardCode(XmlDB.getInstance(fatherActivity).getKeyString("divisionCode", ""));
     }
 
     public void getAdviceIDList(String milkNo) {

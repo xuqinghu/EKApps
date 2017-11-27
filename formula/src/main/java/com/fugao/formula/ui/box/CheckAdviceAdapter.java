@@ -118,21 +118,19 @@ public class CheckAdviceAdapter extends RecyclerSwipeAdapter<CheckAdviceAdapter.
                 DialogUtils.dissmissProgressDialog();
                 if (code == 200) {
                     if (response != null) {
-                        if ("[]".equals(response)) {
-                            ToastUtils.showShort(activity, "没有数据");
-                        } else {
+                        mData.clear();
+                        if (!"[]".equals(response)) {
                             List<AdviceEntity> beans = FastJsonUtils.getBeanList(response, AdviceEntity.class);
                             if (beans.size() > 0) {
-                                mData.clear();
                                 mData = beans;
-                                setData(mData, milkCode);
-                                update(mData);
-                                ToastUtils.showShort(activity, "取消核对成功");
                             }
                         }
+                        setData(mData, milkCode);
+                        update(mData);
+                        ToastUtils.showShort(activity, "取消核对成功");
+                    } else {
+                        ToastUtils.showShort(activity, "服务器异常");
                     }
-                } else {
-                    ToastUtils.showShort(activity, "服务器异常");
                 }
             }
 
@@ -146,6 +144,7 @@ public class CheckAdviceAdapter extends RecyclerSwipeAdapter<CheckAdviceAdapter.
     }
 
     //刷新人数和瓶数
+
     private void update(List<AdviceEntity> beans) {
         int count = 0;
         List<AdviceEntity> beans1 = new ArrayList<>();
@@ -180,6 +179,7 @@ public class CheckAdviceAdapter extends RecyclerSwipeAdapter<CheckAdviceAdapter.
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.putExtra("advice", mData.get(position));
+                intent.putExtra("state", "已核对");
                 intent.setClass(activity, AdviceDetailActivity.class);
                 activity.startActivity(intent);
             }
@@ -189,10 +189,14 @@ public class CheckAdviceAdapter extends RecyclerSwipeAdapter<CheckAdviceAdapter.
             public void onClick(View view) {
                 //关闭侧滑
                 mItemManger.closeAllItems();
-                if ("0".equals(mData.get(position).AdviceStatus)) {
-                    ToastUtils.showShort(activity, "这条医嘱还没有被核对");
-                } else if ("1".equals(mData.get(position).AdviceStatus)) {
+                if ("1".equals(mData.get(position).AdviceStatus)) {
                     cancel(mData.get(position));
+                } else if ("2".equals(mData.get(position).AdviceStatus)) {
+                    ToastUtils.showShort(activity, "处于装箱状态，不能取消核对");
+                } else if ("3".equals(mData.get(position).AdviceStatus)) {
+                    ToastUtils.showShort(activity, "处于签发状态，不能取消核对");
+                } else if ("4".equals(mData.get(position).AdviceStatus)) {
+                    ToastUtils.showShort(activity, "处于签收状态，不能取消核对");
                 }
             }
         });
@@ -208,8 +212,15 @@ public class CheckAdviceAdapter extends RecyclerSwipeAdapter<CheckAdviceAdapter.
         } else if ("1".equals(item.AdviceStatus)) {
             viewHolder.state.setText("已核对");
             viewHolder.state.setTextColor(activity.getResources().getColor(R.color.text_blue));
-        } else {
+        } else if ("2".equals(item.AdviceStatus)) {
             viewHolder.state.setText("已装箱");
+            viewHolder.state.setTextColor(activity.getResources().getColor(R.color.text_yellow));
+        } else if ("3".equals(item.AdviceStatus)) {
+            viewHolder.state.setText("已签发");
+            viewHolder.state.setTextColor(activity.getResources().getColor(R.color.text_pink));
+        } else if ("4".equals(item.AdviceStatus)) {
+            viewHolder.state.setText("已签收");
+            viewHolder.state.setTextColor(activity.getResources().getColor(R.color.text_red));
         }
         mItemManger.bind(viewHolder.itemView, position);
     }

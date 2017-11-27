@@ -8,15 +8,23 @@ import android.widget.TextView;
 
 import com.flyco.tablayout.SegmentTabLayout;
 import com.flyco.tablayout.listener.OnTabSelectListener;
+import com.fugao.formula.MessageEvent;
 import com.fugao.formula.R;
 import com.fugao.formula.base.BaseActivity;
 import com.fugao.formula.constant.Constant;
 import com.fugao.formula.db.DataBaseInfo;
 import com.fugao.formula.db.dao.MilkNameDao;
+import com.fugao.formula.db.dao.TimeListDao;
+import com.fugao.formula.entity.TimeEntity;
 import com.fugao.formula.utils.StringUtils;
 import com.fugao.formula.utils.XmlDB;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -33,28 +41,45 @@ public class BoxingActivity extends BaseActivity {
     @BindView(R.id.tv_all_sure)
     TextView tv_all_sure;
     private ArrayList<Fragment> mFragments = new ArrayList<>();
-    private CheckAdviceFragment fragment1;
+    private CheckAdviceFragment1 fragment1;
     private BoxingFragment fragment2;
     private BoxingFragment1 fragment3;
     private String[] mTitles = {"医嘱核对", "今日装箱"};
     private String time;
     public MilkNameDao milkNameDao;
+    private TimeListDao timeListDao;
+    private String[] times = {"00", "01", "02", "03", "04", "05", "06", "07", "08",
+            "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"};
+    private List<TimeEntity> mTimes;
 
     @Override
     public void setContentView() {
         setContentView(R.layout.activity_boxing);
-
     }
 
     @Override
     public void initView() {
-        showAllSure();
+        XmlDB.getInstance(BoxingActivity.this).saveKey("milkCode", "");
+        timeListDao = new TimeListDao(DataBaseInfo.getInstance(BoxingActivity.this));
+        XmlDB.getInstance(BoxingActivity.this).saveKey("time", "");
+        mTimes = new ArrayList<>();
+        timeListDao.deleteAllInfo();
+        for (int i = 0; i < times.length; i++) {
+            TimeEntity time = new TimeEntity();
+            time.Name = times[i];
+            time.State = "0";
+            mTimes.add(time);
+        }
+        timeListDao.saveToTimeList(mTimes);
+        //注册事件
+        EventBus.getDefault().register(this);
+        Constant.SELECT_PLACE="未核对";
     }
 
     @Override
     public void initData() {
         milkNameDao = new MilkNameDao(DataBaseInfo.getInstance(BoxingActivity.this));
-        fragment1 = new CheckAdviceFragment();
+        fragment1 = new CheckAdviceFragment1();
         mFragments.add(fragment1);
         fragment2 = new BoxingFragment();
         fragment3 = new BoxingFragment1();
@@ -69,7 +94,6 @@ public class BoxingActivity extends BaseActivity {
         tv_all_sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Constant.CHECK_ALL = true;
                 fragment1.checkYZ(tv_all_sure, "");
             }
         });
@@ -97,7 +121,6 @@ public class BoxingActivity extends BaseActivity {
                     division.setVisibility(View.GONE);
                     tv_all_sure.setVisibility(View.GONE);
                 }
-
             }
 
             @Override
@@ -122,12 +145,16 @@ public class BoxingActivity extends BaseActivity {
     }
 
     //判断是否显示全部核对按钮,支持1-3个时间点
-    private void showAllSure() {
-        time = XmlDB.getInstance(BoxingActivity.this).getKeyString("time", "");
-        if (!StringUtils.StringIsEmpty(time)) {
-            String[] times = time.split(";");
-            if (times.length <= 3) {
-                tv_all_sure.setVisibility(View.VISIBLE);
+    public void showAllSure(boolean hasData) {
+        if (hasData) {
+            time = XmlDB.getInstance(BoxingActivity.this).getKeyString("time", "");
+            if (!StringUtils.StringIsEmpty(time)) {
+                String[] times = time.split(";");
+                if (times.length <= 3) {
+                    tv_all_sure.setVisibility(View.VISIBLE);
+                } else {
+                    tv_all_sure.setVisibility(View.GONE);
+                }
             } else {
                 tv_all_sure.setVisibility(View.GONE);
             }
@@ -139,6 +166,10 @@ public class BoxingActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if ("yes".equals(XmlDB.getInstance(BoxingActivity.this).getKeyString("boxing", ""))) {
+            fragment1.getData();
+            XmlDB.getInstance(BoxingActivity.this).saveKey("boxing", "no");
+        }
     }
 
     //扫描奶瓶
@@ -149,16 +180,28 @@ public class BoxingActivity extends BaseActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //取消注册事件
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
             case 502:
                 division.setText(XmlDB.getInstance(BoxingActivity.this).getKeyStringValue("divisionName", ""));
-                showAllSure();
-                fragment1.checkNetWork();
+                fragment1.getData();
                 break;
             default:
                 break;
+        }
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(MessageEvent messageEvent){
+        if("refresh".equals(messageEvent.getMessage())){
+            fragment1.refreshCheckFragment();
         }
     }
 }

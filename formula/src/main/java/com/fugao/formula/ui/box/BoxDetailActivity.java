@@ -3,12 +3,14 @@ package com.fugao.formula.ui.box;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.fugao.formula.R;
 import com.fugao.formula.base.BaseActivity;
+import com.fugao.formula.constant.Constant;
 import com.fugao.formula.entity.AdviceEntity;
 import com.fugao.formula.entity.BoxListEntity;
 import com.fugao.formula.utils.RecyclerViewDivider;
@@ -107,6 +109,9 @@ public class BoxDetailActivity extends BaseActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (Constant.CANCEL_BOXING) {
+                    setResult(102);
+                }
                 finish();
             }
         });
@@ -118,5 +123,17 @@ public class BoxDetailActivity extends BaseActivity {
         Intent intent = getIntent();
         boxListEntity = new BoxListEntity();
         boxListEntity = (BoxListEntity) intent.getSerializableExtra("boxlist");
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            if (Constant.CANCEL_BOXING) {
+                setResult(102);
+            }
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

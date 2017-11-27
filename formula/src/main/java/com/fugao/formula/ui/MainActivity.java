@@ -12,6 +12,7 @@ import com.fugao.formula.base.BaseActivity;
 import com.fugao.formula.ui.box.BoxingActivity;
 import com.fugao.formula.ui.signSend.SignSendActivity;
 import com.fugao.formula.ui.signrReceive.SignReceiveActivity;
+import com.fugao.formula.ui.signrReceive.SignReceiveActivity1;
 import com.fugao.formula.utils.XmlDB;
 import com.fugao.formula.utils.dialog.TwoBtnDialog;
 
@@ -70,7 +71,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 break;
             case R.id.ll_sign_receive:
                 Intent intent3 = new Intent();
-                intent3.setClass(MainActivity.this, SignReceiveActivity.class);
+                intent3.setClass(MainActivity.this, SignReceiveActivity1.class);
                 startActivity(intent3);
             default:
                 break;

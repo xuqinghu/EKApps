@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.fugao.formula.R;
+import com.fugao.formula.constant.Constant;
 import com.fugao.formula.constant.FormulaApi;
 import com.fugao.formula.entity.AdviceEntity;
 import com.fugao.formula.entity.MilkDetail;
@@ -32,6 +33,7 @@ public class BoxDetailAdviceAdapter1 extends RecyclerSwipeAdapter<BoxDetailAdvic
     public static class SimpleViewHolder extends RecyclerView.ViewHolder {
         SwipeLayout swipeLayout;
         Button button;
+        TextView bedNo;
         TextView name;
         TextView pid;
         TextView milkName;
@@ -41,6 +43,7 @@ public class BoxDetailAdviceAdapter1 extends RecyclerSwipeAdapter<BoxDetailAdvic
             super(itemView);
             swipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipe);
             button = (Button) itemView.findViewById(R.id.btn_cancle);
+            bedNo = (TextView) itemView.findViewById(R.id.tv_box_detail_item_bedNo);
             name = (TextView) itemView.findViewById(R.id.tv_box_detail_item_name);
             pid = (TextView) itemView.findViewById(R.id.tv_box_detail_item_pid);
             milkName = (TextView) itemView.findViewById(R.id.tv_box_detail_item_milkName);
@@ -89,6 +92,7 @@ public class BoxDetailAdviceAdapter1 extends RecyclerSwipeAdapter<BoxDetailAdvic
                 }
             }
         });
+        viewHolder.bedNo.setText(item.BedNo);
         viewHolder.name.setText(item.PatName);
         viewHolder.pid.setText(item.HosptNo);
         viewHolder.milkName.setText(item.MilkName);
@@ -127,6 +131,7 @@ public class BoxDetailAdviceAdapter1 extends RecyclerSwipeAdapter<BoxDetailAdvic
                     mData.remove(bean);
                     setData(mData, state, HZID, milkBoxID);
                     ToastUtils.showShort(activity, "取消装箱成功");
+                    Constant.CANCEL_BOXING=true;
                 } else {
                     ToastUtils.showShort(activity, "服务器异常");
                 }

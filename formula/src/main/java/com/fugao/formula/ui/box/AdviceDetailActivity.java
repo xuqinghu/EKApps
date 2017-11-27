@@ -41,6 +41,7 @@ public class AdviceDetailActivity extends BaseActivity {
     @BindView(R.id.tv_advice_detail_reguTime)
     TextView reguTime;
     private AdviceEntity mData;
+    private String state = "";
 
     @Override
     public void setContentView() {
@@ -59,8 +60,23 @@ public class AdviceDetailActivity extends BaseActivity {
         } else if ("1".equals(mData.AdviceStatus)) {
             status.setText("已核对");
             status.setTextColor(getResources().getColor(R.color.text_blue));
-        } else {
+        } else if ("2".equals(mData.AdviceStatus)) {
             status.setText("已装箱");
+            status.setTextColor(getResources().getColor(R.color.text_yellow));
+        } else if ("3".equals(mData.AdviceStatus)) {
+            status.setText("已签发");
+            status.setTextColor(getResources().getColor(R.color.text_pink));
+        } else if ("4".equals(mData.AdviceStatus)) {
+            status.setText("已签收");
+            status.setTextColor(getResources().getColor(R.color.text_red));
+        }
+        if ("未签收".equals(state)) {
+            status.setText("未签收");
+            status.setTextColor(getResources().getColor(R.color.text_green));
+        }
+        if ("已签收".equals(state)) {
+            status.setText("已签收");
+            status.setTextColor(getResources().getColor(R.color.text_red));
         }
         bedNo.setText("床位号：" + mData.BedNo);
         if (mData.MilkName.length() > 10) {
@@ -95,5 +111,6 @@ public class AdviceDetailActivity extends BaseActivity {
     public void initIntent() {
         Intent intent = getIntent();
         mData = (AdviceEntity) intent.getSerializableExtra("advice");
+        state = intent.getStringExtra("state");
     }
 }
