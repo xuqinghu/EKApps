@@ -8,7 +8,6 @@ import android.os.Message;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.alibaba.fastjson.JSON;
 import com.fugao.formula.base.BaseActivity;
 import com.fugao.formula.constant.FormulaApi;
@@ -16,23 +15,20 @@ import com.fugao.formula.entity.NurseBean;
 import com.fugao.formula.ui.MainActivity;
 import com.fugao.formula.utils.DialogUtils;
 import com.fugao.formula.utils.FastJsonUtils;
-import com.fugao.formula.utils.FileHelper;
 import com.fugao.formula.utils.NetWorkUtils;
 import com.fugao.formula.utils.OkHttpUtils;
 import com.fugao.formula.utils.StringUtils;
 import com.fugao.formula.utils.ToastUtils;
 import com.fugao.formula.utils.XmlDB;
 import com.fugao.formula.utils.dialog.SingleBtnDialog;
-
+import com.fugao.formula.wifi.WiFiService;
 import butterknife.BindView;
-
-import static android.R.attr.name;
 
 /**
  * Created by huxq on 2017/6/6 0006.
  */
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity{
     @BindView(R.id.et_username)
     EditText et_username;
     @BindView(R.id.et_password)
@@ -53,6 +49,8 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void setContentView() {
         setContentView(R.layout.activity_login);
+        //wifi 管理service
+        startService(new Intent(this, WiFiService.class));
         loginToMainActivity = new Handler() {
             public void handleMessage(Message msg) {
                 switch (msg.what) {
@@ -72,7 +70,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void initView() {
-        et_username.setText(XmlDB.getInstance(LoginActivity.this).getKeyStringValue("name", ""));
+        et_username.setText(XmlDB.getInstance(LoginActivity.this).getKeyStringValue("userCode", ""));
         divisionCode = XmlDB.getInstance(LoginActivity.this).getKeyString("divisionCode", "");
     }
 
@@ -82,7 +80,7 @@ public class LoginActivity extends BaseActivity {
         application = (FormulaApplication) getApplication();
         if (BuildConfig.DEBUG) {
             et_username.setText("0000");
-            et_password.setText("fg3602001");
+            et_password.setText("fg19831993");
         }
 
     }
@@ -109,8 +107,8 @@ public class LoginActivity extends BaseActivity {
 
             }
         });
-
     }
+
 
     //检查网络情况
     private void checkNetWork() {
@@ -165,7 +163,6 @@ public class LoginActivity extends BaseActivity {
                         if (response != null) {
                             NurseBean nurseBean = FastJsonUtils.getBean(response, NurseBean.class);
                             if (nurseBean != null && "登录成功".equals(nurseBean.Mark)) {
-                                XmlDB.getInstance(LoginActivity.this).saveKey("name", nurseBean.GH);
                                 if (nurseBean.BQInfo != null && nurseBean.BQInfo.size() > 0) {
                                     application.setDivisionList(nurseBean.BQInfo);
                                     if (StringUtils.StringIsEmpty(divisionCode)) {

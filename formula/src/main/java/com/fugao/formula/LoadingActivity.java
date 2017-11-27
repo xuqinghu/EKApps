@@ -56,8 +56,8 @@ public class LoadingActivity extends AppCompatActivity {
     private void inintSettings() {
         boolean firstCome = XmlDB.getInstance(this).getKeyBooleanValue("firstCome", true);
         if (firstCome) {
-            XmlDB.getInstance(this).saveKey("ip", "192.168.50.177");
-            XmlDB.getInstance(this).saveKey("port", "8002");
+            XmlDB.getInstance(this).saveKey("ip", "192.168.10.125");
+            XmlDB.getInstance(this).saveKey("port", "10668");
             XmlDB.getInstance(this).saveKey("firstCome", false);
         }
 

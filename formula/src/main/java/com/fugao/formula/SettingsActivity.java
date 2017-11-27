@@ -3,6 +3,8 @@ package com.fugao.formula;
 import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,15 +12,23 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.fugao.formula.wifi.AppConfiguration;
+import com.fugao.formula.wifi.IConstants;
+import com.fugao.formula.wifi.WifiUtils;
 
 /**
  * Created by Administrator on 2017/6/26 0026.
  */
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
+    private SharedPreferences mSharedPreferences;
+    private WifiUtils mWifiUtils;
+    private EditTextPreference mName;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -56,8 +66,16 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     private void innitPreference() {
+        mWifiUtils = new WifiUtils(this);
+        mSharedPreferences = getPreferenceScreen().getSharedPreferences();
         bindPreferenceSummaryToValue(findPreference("ip"));
         bindPreferenceSummaryToValue(findPreference("port"));
+        mName = (EditTextPreference) findPreference("wifi_ssid");
+        mName.setSummary(mSharedPreferences.getString("wifi_ssid", IConstants.Wifi.SSID));
+        mName.setEnabled(false);
+        //wifi 自动切换
+        SwitchPreference auto = (SwitchPreference) findPreference("wifi_auto");
+        auto.setChecked(AppConfiguration.WIFI_AUTO);
     }
 
     /**
@@ -116,12 +134,41 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Preference pref = findPreference(key);
+        switch (key) {
+            case "wifi_ssid":
+                EditTextPreference ssid = (EditTextPreference) pref;
+                pref.setSummary(ssid.getText());
+                AppConfiguration.WIFI_SSID = ssid.getText();
+                //重新连接网络
+                mWifiUtils.checkAndConnect(AppConfiguration.WIFI_SSID);
+                break;
+            case "wifi_auto":
+                //wifi 是否自动切换
+                SwitchPreference auto = (SwitchPreference) pref;
+                if (auto.isChecked()) {
+                    AppConfiguration.WIFI_AUTO = true;
+                    sendBroadcast(new Intent(IConstants.IBroadcastReceiver.AUTO_CHANGE_WIFI_ENABLE));
+                } else {
+                    AppConfiguration.WIFI_AUTO = false;
+                    sendBroadcast(new Intent(IConstants.IBroadcastReceiver.AUTO_CHANGE_WIFI_DISABLE));
+                }
+                break;
+            default:
                 break;
         }
-        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 }
