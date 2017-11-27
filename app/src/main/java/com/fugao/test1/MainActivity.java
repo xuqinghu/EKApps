@@ -1,4 +1,4 @@
-package com.fugao.test;
+package com.fugao.test1;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,8 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.fugao.breast.ui.BreastActivity;
-import com.fugao.breast.ui.put.PutList;
-import com.fugao.breast.ui.thaw.ThawList;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private TextView tv_main_breast;
@@ -34,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 intent1.putExtra("wardName", "二病区");
                 intent1.putExtra("ip", "192.168.10.125");
                 intent1.putExtra("port", "9998");
+//                intent1.putExtra("port", "10667");
                 intent1.setClass(MainActivity.this, BreastActivity.class);
                 startActivity(intent1);
                 break;

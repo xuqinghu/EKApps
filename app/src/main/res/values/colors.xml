@@ -6,4 +6,10 @@
     <!-- 左侧 标题的颜色 -->
     <color name="leftttiltebackground">#5297C1</color>
     <color name="white">#FFFFFF</color>
+    <!--标题栏-->
+    <color name="bg_breast_header">#56A0f5</color>
+    <color name="text_white">#fff2f7</color>
+    <color name="text_black">#1f1c1c</color>
+    <color name="black">#ff646464</color>
+    <color name="half_transparent">#aa000000</color>
 </resources>
